@@ -1,0 +1,666 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "descripton": "This is eKOSORA. The next URUBUTO but better",
+        "version": "1.0.0",
+        "title": "Academics management system",
+        "contant": {
+            "email": "ishimvainqueur@gmail.com"
+        },
+        "licence": {
+            "name": "MIT License"
+        }
+    },
+    "host": "localhost:80",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "auth",
+            "description": "authentication related apis"
+        },
+        {
+            "name": "student",
+            "description": "student related apis"
+        },
+        {
+            "name": "parent",
+            "description": "parent related apis"
+        },
+        {
+            "name": "educator",
+            "description": "educator related apis"
+        },
+        {
+            "name": "announcement",
+            "description": "announcement related apis"
+        },
+        {
+            "name": "settings",
+            "description": "setting related apis"
+        }
+    ],
+    "schemes": ["http"],
+    "paths": {
+        "/login/check": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Authenticate user logging in",
+                "description": "Checking credentials when trying to login",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "User info object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/loginBody"
+                    }
+                }],
+                "security": {
+                    "cookieAuth": ["jwt"]
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in \n Note: Not all everything in the response below will be given. This will depend on the type of account",
+                        "schema": {
+                            "$ref": "#/definitions/loginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "logout": {
+            "get": {
+                "tags": ["auth"],
+                "summary": "Log out of the system",
+                "description": "Logs out of the system  and all cookies are removed",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "schema": {
+                            "$ref": "#/definitions/logoutResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "student/register": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Add student to the database",
+                "description": "This route can only be used by educators with the respective cookies to add new students to the database",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "New student info object",
+                    "schema": {
+                        "$ref": "#/definitions/newStudentBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully added a new student to the database",
+                        "schema": {
+                            "$ref": "#/definitions/newStudent200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong in the server or the database",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/view": {
+            "get": {
+                "tags": ["student"],
+                "summary": "Get all the students in the database",
+                "description": "A full list of all students saved in the database and some info about them",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fetched all the students",
+                        "schema": {
+                            "$ref": "#/definitions/viewStudents200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "In case an error occured while trying to fetch all the students",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "student/edit?id": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Edit a student's info",
+                "description": "You can edit a student's personal info like names, class, or email",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "An object containing the new student info",
+                    "schema": {
+                        "$ref": "#/definitions/editStudentBody"
+                    }
+                    
+                    },
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "description": "The _id of the student whose information needs to be changed"
+                        
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully edited the student's info",
+                        "schema": {
+                            "$ref": "#/definitions/editStudent200Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request.\nPossible mistakes include: not including the student's id in the query parameters, passing an invalid id, ...",
+                        "schema": {
+                            "$ref": "#/definitions/editStudent400Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side.",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "student/addRecord": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Add record to all students",
+                "description": "Add a record [Eg: Quiz, test, exam] to all the students of a specified class and specified subject",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "New record body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/addRecordBody"
+                    }
+
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully added the new record to all students of the class",
+                        "schema": {
+                            "$ref": "#/definitions/addRecord200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/updateMark":{
+            "post": {
+                "tags": ["student"],
+                "summary": "Update one student's mark",
+                "description": "You can change only one student's mark on a certain record",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "Updated mark object",
+                    "schema":{
+                        "$ref": "#/definitions/updateMarkBody"
+                    }
+
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully updated the student's mark",
+                        "schema": {
+                            "$ref": "#/definitions/updateMark200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/updateForMany": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Update many student's marks at once",
+                "description": "Add or remove a specified number of marks on a specified record for multiple students",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "The new marks object",
+                    "schema": {
+                        "$ref": "#/definitions/updateForManyBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the students' marks",
+                        "schema": {
+                            "$ref": "#/definitions/updateForMany200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something Went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/getRecords": {
+            "get": {
+                "tags": ["student"],
+                "summary": "Get all records of a class",
+                "description": "Returns all the records of a certain class in a certain subject",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "year",
+                    "required": true,
+                    "description": "The academic year of the class",
+                    "schema": {
+                        "$ref": "#/definitions/getRecordsYearQuery"
+                    }
+                    }, 
+                    {
+                        "in": "query",
+                        "name": "class",
+                        "required": true,
+                        "description": "The class label",
+                        "schema": {
+                            "$ref": "#/definitions/getRecordsClassQuery"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "subject",
+                        "required": true,
+                        "description": "The class label",
+                        "schema": {
+                            "$ref": "#/definitions/getRecordsSubjectQuery"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all the records in the specified class and subject"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "loginBody": {
+            "type": "object",
+            "properties": {
+                "accountType": {
+                    "type": "string",
+                    "example": "student"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "RCA0322RJU"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "loginResponse": {
+            "type": "object",
+            "properties": {
+                "names":{
+                    "type": "string",
+                    "example": "ISHIMWE Vainqueur"
+                },
+                "_id":{
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                },
+                "code":{
+                    "type": "string",
+                    "example": "RCA0231KIS"
+                },
+                "email":{
+                    "type": "string",
+                    "example": "ishimvainqueur@gmail.com"
+                },
+                "title":{
+                    "type": "string",
+                    "example": "none"
+                },
+                "tel":{
+                    "type": "string",
+                    "example": "+2507884294132"
+                },
+                "parentEmails":{
+                    "type": "array",
+                    "example": ["father@gmail.com", "mother@gmail.com"]
+                },
+                "lessons":{
+                    "type": "array",
+                    "description": "Only for teachers",
+                    "example": ["JS", "WUI"]
+                },
+                "class":{
+                    "type": "object",
+                    "example": {
+                        "class": "A",
+                        "year": 1
+                    }
+                },
+                "profileLink":{
+                    "type": "string",
+                    "example": "http://google.com/yourprofile.png"
+                },
+                "accountType":{
+                    "type": "string",
+                    "example": "student"
+                },
+                "children":{
+                    "type": "array",
+                    "example": ["son@gmail.com", "daughter@gmail.com"]
+                }
+            }
+        },
+        "logoutResponse":{
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "newStudentBody": {
+            "type": "object",
+            "required": ["names", "code", "class", "email"],
+            "properties": {
+                "names": {
+                    "type": "string",
+                    "example":"ISHIMWE Vainqueur" 
+                },
+                "code": {
+                    "type": "",
+                    "example": "RCA0231KIS"
+                },
+                "class": {
+                    "type": "object",
+                    "example": {
+                        "year": 1,
+                        "class": "E"
+                    }
+                },
+                "email": {
+                    "type": "string",
+                    "example": "ishimvainqueur@gmail.com"
+                }
+            }
+        },
+        "newStudent200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "viewStudents200Response":{
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "array",
+                    "example": [
+                        {
+                            "names": "ISHIMWE Vainqueur",
+                            "class": {
+                                "year": 1,
+                                "class": "E"
+                            },
+                            "email": "ishimvainqueur@gmail.com",
+                            "parentEmails": ["father@gmail.com", "mother@gmail.com"],
+                            "profileLink": "http://google.com/profile.png"
+
+                        },
+                        {
+                            "names": "Not ISHIMWE Vainqueur",
+                            "class": {
+                                "year": 1,
+                                "class": "C"
+                            },
+                            "email": "notishimvainqueur@gmail.com",
+                            "parentEmails": ["notfather@gmail.com", "notmother@gmail.com"],
+                            "profileLink": "http://google.com/notprofile.png"
+
+                        }
+                    ]
+                }
+            }
+        },
+        "editStudentBody": {
+            "type": "object",
+            "required": ["parentEmails","names","code","class","email"],
+            "properties": {
+                "parentEmails": {
+                    "type": "array",
+                    "example": ["father_new@gmail.com", "mother@gmail.com"]
+                },
+                "names": {
+                    "type": "string",
+                    "example": "ISHIMWE Victor"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "RCA0231KIL"
+                },
+                "class": {
+                    "type": "object",
+                    "example": {
+                        "class": "F",
+                        "year": 1
+                    }
+                },
+                "email": {
+                    "type": "string",
+                    "example": "ishimvictor@gmail.com"
+                }
+
+            }
+        },
+        "editStudent200Response":{
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "editStudent400Response":{
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#MissingID"
+                }
+            }
+        },
+        "500Response":{
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#InternalServerError"
+                },
+                "message": {
+                    "type": "object",
+                    "example": {
+                        "error": "MongoError",
+                        "message": "Connection timeout"
+                    }
+                }
+            }
+        },
+        "addRecordBody": {
+            "type": "object",
+            "required": ["date", "recordName", "max", "subject", "year"],
+            "properties": {
+                "date": {
+                    "type": "date",
+                    "example": 1652156083147
+                },
+                "recordName": {
+                    "type": "string",
+                    "example": "Maths Pop Quiz"
+                },
+                "max": {
+                    "type": "number",
+                    "example": 40
+                },
+                "reversed": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "MTC"
+                },
+                "year": {
+                    "type": "number",
+                    "example": 1
+                }
+            }
+        },
+        "addRecord200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "updateMarkBody": {
+            "type": "object",
+            "required": ["recordId", "studentId", "mark"],
+            "properties": {
+                "recordId": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                },
+                "studentId": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                },
+                "mark": {
+                    "type": "number",
+                    "example": 12
+                }
+            }
+        },
+        "updateMark200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "object"
+                }
+            }
+        },
+        "updateForManyBody": {
+            "type": "object",
+            "required": ["recordId", "students", "mark", "educatorId"],
+            "properties": {
+                "recordId": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                },
+                "students": {
+                    "type": "array",
+                    "example": ["6270f357e0f8e569651cae43", "6270f357e0f8e569651cffd4", "6256f357e0f8e569651cae98"]
+                },
+                "mark": {
+                    "type": "number",
+                    "example": 4
+                },
+                "notifyParents": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "educatorId": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                }
+            }
+        },
+        "updateForMany200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "object"
+                }
+            }
+        },
+        "getRecordsYearQuery": {
+            "type": "number",
+            "example": 1
+        },
+        "getRecordsClassQuery": {
+            "type": "string",
+            "example": "A"
+        },
+        "getRecordsSubjectQuery": {
+            "type": "string",
+            "example": "MTC"
+        }
+    }
+}
