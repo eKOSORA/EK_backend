@@ -320,7 +320,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns all the records in the specified class and subject"
+                        "description": "Returns all the records in the specified class and subject",
+                        "schema": {
+                            "$ref": "#/definitions/getRecords200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something Went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
                     }
                 }
             }

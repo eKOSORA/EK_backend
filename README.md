@@ -1,3 +1,2 @@
-# eKOSORA
-
-Just a little project in HTML5, CSS, VanillaJS and NodeJS that works a little bit like urubuto but with more features!
+# EK_backend
+The documented back-end of eKOSORA [remastered into a MERN stack app]
