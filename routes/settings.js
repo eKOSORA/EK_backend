@@ -22,11 +22,6 @@ cloudinary.config({
 
 
 app.post('/newProfile', (req, res)=>{
-    // console.log(req.read())
-    // console.log(req.body)
-    // console.log(req.body)
-    // return res.json({code: "#Success"})
-    // console.log(req.files.file)
     cloudinary.uploader.upload_stream({format: req.files.file.mimetype.split('/')[1]}, async (err, doc)=>{
         if(err) return res.json({code: "#Error", message: err})
         console.log(doc.url)

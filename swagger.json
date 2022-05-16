@@ -23,13 +23,14 @@
             "description": "student related apis"
         },
         {
-            "name": "parent",
-            "description": "parent related apis"
-        },
-        {
             "name": "educator",
             "description": "educator related apis"
         },
+        {
+            "name": "parent",
+            "description": "parent related apis"
+        },
+        
         {
             "name": "announcement",
             "description": "announcement related apis"
@@ -178,7 +179,7 @@
                         }
                     },
                     "500": {
-                        "description": "Something went wrong on the server side.",
+                        "description": "Something went wrong on the server side",
                         "schema": {
                             "$ref": "#/definitions/500Response"
                         }
@@ -276,7 +277,7 @@
                         }
                     },
                     "500": {
-                        "description": "Something Went wrong on the server side",
+                        "description": "Something went wrong on the server side",
                         "schema": {
                             "$ref": "#/definitions/500Response"
                         }
@@ -326,7 +327,368 @@
                         }
                     },
                     "500": {
-                        "description": "Something Went wrong on the server side",
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/deleteRecord": {
+            "delete": {
+                "tags": ["student"],
+                "summary": "Delete a record",
+                "description": "Delete a record from all students who have that particular records",
+                "produces":[ "application/json" ],
+                "parameters": [{
+                    "in": "query",
+                    "name": "_id",
+                    "description": "The _id of the record in question",
+                    "schema": {
+                        "$ref": "#/definitions/deleteRecordIdQuery"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the record",
+                        "schema": {
+                            "$ref": "#/definitions/deleteRecord200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/addParent": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Add a parent",
+                "description": "Add a parent email to a student's account so that they get notified of changes in the student's performance",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "the addParent object",
+                    "schema": {
+                        "$ref": "#/definitions/addParentBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully added the new parent email",
+                        "schema": {
+                            "$ref": "#/definitions/addParent200Response"
+                        }
+                    },
+                    "404":{
+                        "description": "Student not found",
+                        "schema": {
+                            "$ref": "#/definitions/404IdResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/getMarks": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Get all the marks of a student",
+                "description": "Returns the marks of a student",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "Request body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/getMarksBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Returns the required results",
+                        "schema": {
+                            "$ref": "#/definitions/getMarks200Response"
+                        }
+                    },
+                    "404": {
+                        "description": "All the sent _ids don't exist in the database",
+                        "schema": {
+                            "$ref": "#/definitions/404IdResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/student/getSummary": {
+            "post": {
+                "tags": ["student"],
+                "summary": "Get Summary of Lessons and Performance to make a chart or do statistics",
+                "description": "Returns data about all of the subjects that a teacher teaches and the summary of all the students' performance in said subjects",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "Body containing the required info",
+                    "schema": {
+                        "$ref": "#/definitions/getSummaryBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved the summary",
+                        "schema": {
+                            "$ref": "#/definitions/getSummary200Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request: The subjects array is empty or not present",
+                        "schema": {
+                            "$ref": "#/definitions/getSummary400Response"
+                        }
+                    }
+                }
+
+            }
+        },
+        "/educator/register": {
+            "post": {
+                "tags": ["educator"],
+                "summary": "Register a new educator",
+                "description": "Add a new educator to the system\nNB: This is only usable by users with the 'admin' title",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "All the info about the new educator",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/registerEducatorBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully added the new educator to the database",
+                        "schema": {
+                            "$ref": "#/definitions/registerEducator200Response"
+                        }
+                    },
+                    "403": {
+                        "description": "Only admin users can register new educators",
+                        "schema": {
+                            "$ref": "#/definitions/registerEducator403Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/educator/view": {
+            "get": {
+                "tags": ["educator"],
+                "summary": "Get a list of all the educators",
+                "description": "Returns an array of all the educators registered in the system",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved the array of educators",
+                        "schema": {
+                            "$ref": "#/definitions/viewEducators200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/educator/edit": {
+            "post": {
+                "tags": ["educator"],
+                "summary": "Edit the info of an educator",
+                "description": "Edit an educator's info",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "_id",
+                    "description": "The _id of the educator",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/editEducatorIdQuery"
+                    }
+                },{
+                    "in": "body",
+                    "name": "body",
+                    "description": "The new educator info object",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/editEducatorBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the educator's info",
+                        "schema": {
+                            "$ref": "#/definitions/editEducator200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/parent/getParentInfo": {
+            "post": {
+                "tags": ["parent"],
+                "summary": "Get info about one parent",
+                "description": "Get a parent's personal information",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "The body of the request",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/getParentInfoBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved the parent's info",
+                        "schema": {
+                            "$ref": "#/definitions/getParentInfo200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Invalid or Unknown _id",
+                        "schema": {
+                            "$ref": "#/definitions/404IdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/parent/signup": {
+            "post": {
+                "tags": ["parent"],
+                "description": "Add a parent to the database with their respective credentials and contact",
+                "summary": "Set parent's credentials",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "the request body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/parentSignupBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully set the parent's user info",
+                        "schema": {
+                            "$ref": "#/definitions/parentSignup200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/announcement/add": {
+            "post": {
+                "tags": ["announcement"],
+                "summary": "Create a new announcement",
+                "description": "Add a new announcement to the database",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "description": "the request body",
+                    "schema": {
+                        "$ref": "#/definitions/addAnnouncementBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully added the new announcement",
+                        "schema": {
+                            "$ref": "#/definitions/addAnnouncement200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/announcement/view": {
+            "get": {
+                "tags": ["announcement"],
+                "summary": "Get announcements",
+                "description": "Get all announcements reserved for a certain group",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved the array of announcements",
+                        "schema": {
+                            "$ref": "#/definitions/viewAnnouncement200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
                         "schema": {
                             "$ref": "#/definitions/500Response"
                         }
@@ -670,6 +1032,313 @@
         "getRecordsSubjectQuery": {
             "type": "string",
             "example": "MTC"
+        },
+        "getRecords200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "records": {
+                    "type": "array",
+                    "example": []
+                }
+            }
+        },
+        "deleteRecordIdQuery": {
+            "type": "string",
+            "example": "6270f357e0f8e569651cae43"
+        },
+        "deleteRecord200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "addParent200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "404IdResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#NoSuchID"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "There is no student with the provided _id"
+                }
+            }
+        },
+        "getMarksBody": {
+            "type": "object",
+            "required": ["ids"],
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "example": ["6270f357e0f8e569651cae43", "6270f357e0f8e569651cae43"]
+                }
+            }
+        },
+        "getMarks200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "array",
+                    "example": []
+                }
+            }
+        },
+        "getSummaryBody": {
+            "type": "object",
+            "properties": {
+                "lessons": {
+                    "type": "array",
+                    "example": ["MTC", "PHY"]
+                }
+            }
+        },
+        "getSummary200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "object",
+                    "example": {}
+                }
+            }
+        },
+        "getSummary400Response": {
+            "type": "object",
+            "properties": {
+                "code":{
+                    "type":  "string",
+                    "example": "#EmptyOrNullLessonsArray"
+                }
+            }
+        },
+        "registerEducatorBody": {
+            "type": "object",
+            "required": ["names", "title", "lessons", "email", "tel"],
+            "properties": {
+                "names": {
+                    "type": "string",
+                    "example": "Educator IV"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "0000"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "lessons": {
+                    "type": "array",
+                    "example": ["PHP", "WUI", "FOD"]
+                },
+                "email": {
+                    "type": "string",
+                    "example": "notmyemail@gmail.com"
+                },
+                "tel": {
+                    "type": "string",
+                    "example": "+2507884294132"
+                }
+            }
+        },
+        "registerEducator200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "registerEducator403Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#NoPrivileges"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "This feature is reserved for admin educators"
+                }
+            }
+        },
+        "viewEducators200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "array",
+                    "example": []
+                }
+            }
+        },
+        "editEducatorBody": {
+            "type": "object",
+            "properties": {
+                "names": {
+                    "type": "string",
+                    "example": "Not IV"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "0000"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "lessons": {
+                    "type": "array",
+                    "example": []
+                },
+                "email": {
+                    "type": "string",
+                    "example": "notiv@gmail.com"
+                },
+                "tel": {
+                    "type": "string",
+                    "example": "+2507884294132"
+                }
+            }
+        },
+        "editEducator200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "editEducatorIdQuery": {
+            "type": "string",
+            "example": "6270f357e0f8e569651cae43"
+        },
+        "getParentInfoBody": {
+            "type": "object",
+            "required": ["_id"],
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                }
+            }
+        },
+        "getParentInfo200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "object",
+                    "example": {}
+                }
+            }
+        },
+        "parentSignupBody": {
+            "type": "object",
+            "required": ["names", "tel", "password"],
+            "properties": {
+                "names": {
+                    "type": "string",
+                    "example": "Father Of IV"
+                },
+                "tel": {
+                    "type": "string",
+                    "example": "+2507884294132"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "someVerySecretPassword"
+                }
+            }
+        },
+        "parentSignup200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "addAnnouncementBody": {
+            "type": "object",
+            "required": ["composer_id", "title", "content", "meantFor"],
+            "properties": {
+                "composer_id": {
+                    "type": "string",
+                    "example": "6270f357e0f8e569651cae43"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "General Announcement"
+                },
+                "content": {
+                    "type": "string",
+                    "example": "Something that everyone needs to know"
+                },
+                "meantFor": {
+                    "type": "array",
+                    "example": ["educator", "parents"]
+                },
+                "expiry": {
+                    "type": "date",
+                    "example": 1652647199001
+                }
+            }
+        },
+        "addAnnouncement200Response":  {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "viewAnnouncement200Response":  {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "array",
+                    "example": []
+                }
+            }
         }
     }
 }

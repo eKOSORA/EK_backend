@@ -282,7 +282,7 @@ app.get('/getRecords/', (req, res)=>{
     }).sort({"names": 1})
 })
 
-app.get('/deleteRecord', async (req, res)=>{
+app.delete('/deleteRecord', async (req, res)=>{
     console.log(req.query._id)
     try{
         let deleteRecord = await require('../models/ml-student').updateMany({"records": {$elemMatch: {"_id": mongo.Types.ObjectId(req.query._id)}}}, {$pull: {"records": {"_id": mongo.Types.ObjectId(req.query._id)}}})
@@ -290,7 +290,7 @@ app.get('/deleteRecord', async (req, res)=>{
         res.json({code: "#Success"})
     }catch(err){
         console.log(err)
-        res.json({code: "#Error", message: err})
+        res.status(500).json({code: "#InternalServerError", message: err})
     }
 })
 
@@ -302,7 +302,7 @@ app.post('/addParent', async (req, res)=>{
         student = await require('../models/ml-student').updateOne({_id: req.body.studentId}, {$push: {parentEmails: req.body.email}})
 
         if(student.matchedCount == 0){
-            return res.json({code: "#Error", summary: "There is no student with such an ID"})
+            return res.status(404).json({code: "#NoSuchID", summary: "There is no student with such an ID"})
         }
         let existingParent = await require('../models/ml-parent').findOne({email: req.body.email})
         if(!existingParent){
@@ -350,14 +350,14 @@ app.post('/addParent', async (req, res)=>{
         }
     }
     catch(err){
-        return res.json({code: "#Error", message: err})
+        return res.status(500).json({code: "#Error", message: err})
     }
 })
 
-app.get('/getMarks', async (req, res)=>{
+app.post('/getMarks', async (req, res)=>{
     try{
-        let marks = await require('../models/ml-student').find({_id: {$in: req.query.ids.split(',')}})
-        if(marks.length == 0) return res.json({code: "#NoSuchID"})
+        let marks = await require('../models/ml-student').find({_id: {$in: req.body.ids}})
+        if(marks.length == 0) return res.status(404).json({code: "#NoSuchIDs"})
         marks = marks.map(x => x._doc).map(x => {
             return {
                 records: x.records,
@@ -367,13 +367,13 @@ app.get('/getMarks', async (req, res)=>{
 
         res.json({code: "#Success", doc: marks})
     }catch(e){
-        res.json({code: "#Error", message: e})
+        res.status(500).json({code: "#InternalServerError", message: e})
     }
 })
 
 
 app.post('/getSummary', async (req, res)=>{
-    if((req.body.lessons.length == 0) || !req.body.lessons) return res.json({code: "#EmptyLessonsList"})
+    if((req.body.lessons.length == 0) || !req.body.lessons) return res.status(400).json({code: "#EmptyOrNullLessonsArray"})
 
     try{
         //First check for the classes that have those lessons
@@ -428,7 +428,7 @@ app.post('/getSummary', async (req, res)=>{
         res.json({code: "#Success", doc: classified})
     }catch(e){
         console.log(e)
-        res.json({code: "#Error", message: e})
+        res.status(500).json({code: "#InternalServerError", message: e})
     }
     
 });
@@ -440,7 +440,7 @@ app.post('/getSummary', async (req, res)=>{
 //         {$sum: [2, 5]}
 //     ]);
     
-//     console.log(result)    ;
+//     console.log(result);
 // })()
 
 function getUserId(req, res, next){

@@ -7,7 +7,7 @@ app.post('/add',async  (req, res)=>{
     console.log(req.body)
     // return res.json({code: "#Success"})
     let newAnnouncement = require('../models/ml-announcement')({
-        composer: req.body.composer,
+        composer_id: req.body.composer_id,
         title: req.body.title,
         content: req.body.content,
         meantFor: req.body.meantFor,
@@ -37,7 +37,7 @@ app.get('/view',async (req, res)=>{
         return res.json({code: "#Success", doc: announcements})
     }catch(e){
         console.log(e)
-        return res.json({code: "#Error", message: e})
+        return res.status(500).json({code: "#InternalServerError", message: e})
     }
 })
 
