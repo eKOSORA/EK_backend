@@ -1,10 +1,10 @@
 {
     "swagger": "2.0",
     "info": {
-        "descripton": "This is eKOSORA. The next URUBUTO but better",
+        "description": "This is eKOSORA, an Academics management system. The next URUBUTO but better.",
         "version": "1.0.0",
-        "title": "Academics management system",
-        "contant": {
+        "title": "eKOSORA",
+        "contact": {
             "email": "ishimvainqueur@gmail.com"
         },
         "licence": {
@@ -695,6 +695,83 @@
                     }
                 }
             }
+        },
+        "/settings/newProfile": {
+            "post": {
+                "tags": ["settings"],
+                "summary": "Change the profile of a user",
+                "description": "Upload a new profile for a specified user",
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "parameters": [{
+                        "in": "formData",
+                        "name": "file",
+                        "description": "The new profile file",
+                        "type": "file"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "_id",
+                        "description": "The _id of the user",
+                        "type": "string",
+                        "example": "6256f357e0f8e569651cae98"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully changed the user's profile",
+                        "schema": {
+                            "$ref": "#/definitions/newProfile200Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+                
+            }
+        },
+        "/settings/updateSettings/:id": {
+            "post": {
+                "tags": ["settings"],
+                "summary": "Update a user's settings",
+                "description": "Change a user's info",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "params",
+                    "name": "id",
+                    "description": "The user's id",
+                    "required": true,
+                    "type": "string",
+                    "example": "6256f357e0f8e569651cae98"
+                }, {
+                    "in": "body",
+                    "name": "body",
+                    "description": "The new info about the user",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/updateSettingsBody"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the user's info",
+                        "schema": {
+                            "$ref": "#/definitions/200SucessWithDocResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server side",
+                        "schema": {
+                            "$ref": "#/definitions/500Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1337,6 +1414,41 @@
                 "doc": {
                     "type": "array",
                     "example": []
+                }
+            }
+        },
+        "200SuccessfullProcessResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                }
+            }
+        },
+        "200SucessWithDocResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "doc": {
+                    "type": "object",
+                    "example": {}
+                }
+            }
+        },
+        "newProfile200Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "#Success"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "http://res.cloudinary.com/dyrneab5i/image/upload/v1650316299/pouqczj3j4wrm74p3rn5.jpg"
                 }
             }
         }

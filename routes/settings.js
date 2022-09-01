@@ -3,6 +3,7 @@ const mongo = require('mongoose')
 const app = express.Router()
 const cloudinary = require('cloudinary').v2
 const path = require('path')
+const {_pick, _remove, arr_remove} = require("../oneliners")
 
 
 require('dotenv').config()
@@ -23,7 +24,7 @@ cloudinary.config({
 
 app.post('/newProfile', (req, res)=>{
     cloudinary.uploader.upload_stream({format: req.files.file.mimetype.split('/')[1]}, async (err, doc)=>{
-        if(err) return res.json({code: "#Error", message: err})
+        if(err) return res.status(500).json({code: "#InternalServerError", message: err})
         console.log(doc.url)
         let updatedUserProfile = await require(`../models/ml-${req.body.prefix}`).updateOne({_id: mongo.Types.ObjectId(req.body._id)}, {profileLink: doc.url})
         res.json({code: "#Success", url: doc.url})
@@ -31,8 +32,8 @@ app.post('/newProfile', (req, res)=>{
 })
 
 app.post('/updateSettings/:id', async (req, res)=>{
-    require(`../models/ml-${req.body.prefix}`).updateOne({_id: req.params.id}, req.body, async (err, doc)=>{
-        if(err) return res.json({code: "#Error", message: err})
+    require(`../models/ml-${req.body.prefix}`).updateOne({_id: req.params.id}, _pick(["names", "code", "class", "password", "email"]), async (err, doc)=>{
+        if(err) return res.status(500).json({code: "#InternalServerError", message: err})
         // console.log(doc)
         try{
             let newUser = await require(`../models/ml-${req.body.prefix}`).findOne({_id: req.params.id})
