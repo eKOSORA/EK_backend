@@ -1,6 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
+export type StudentDocument = Student & mongoose.Document;
+
 export class ClassObject {
   _year: number;
   _class: string;
