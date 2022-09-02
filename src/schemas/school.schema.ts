@@ -1,6 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-// export type SchoolDocument =
+export type SchoolDocument = School & Document;
+
 export class SchoolAddress {
   province: string;
   district: string;
