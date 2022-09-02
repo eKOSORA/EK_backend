@@ -32,3 +32,5 @@ export class School {
   @Prop({ type: String, required: true, enum: ['Cambridge', 'REB', 'Other'] })
   programme: string;
 }
+
+export const SchoolSchema = SchemaFactory.createForClass(School);
