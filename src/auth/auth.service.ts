@@ -1,3 +1,4 @@
+import { LoginResponse } from './auth.types';
 import { Student, StudentDocument } from './../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,17 +11,21 @@ export class AuthService {
     private readonly studentModel: Model<StudentDocument>,
   ) {}
 
-  login(accountType: string, emailorcode: string, password: string) {
+  login(
+    accountType: string,
+    emailorcode: string,
+    password: string,
+  ): Promise<LoginResponse> | LoginResponse {
     switch (accountType) {
       case 'student':
         return this.loginStudent(emailorcode, password);
         break;
       default:
-        return false;
+        return { code: '#Error' };
     }
   }
 
-  async loginStudent(code: string, password: string) {
+  async loginStudent(code: string, password: string): Promise<LoginResponse> {
     const user = await this.studentModel.findOne({ code });
     if (!user) return { code: '#Error', message: 'Invalid Code Or Password' };
 

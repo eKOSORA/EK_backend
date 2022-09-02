@@ -1,23 +1,35 @@
+import { LoginResponse } from './auth.types';
 import { LoginBody } from './loginBody.dto';
 import { AuthService } from './auth.service';
 import {
   Body,
   Controller,
-  Inject,
   Post,
+  Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(@Inject() private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   @UsePipes(ValidationPipe)
-  login(@Body() body: LoginBody) {
-    console.log(body);
-    return { code: '#Success' };
+  async login(
+    @Body() { accountType, emailorcode, password }: LoginBody,
+    @Res() res: Response,
+  ) {
+    const result: LoginResponse = await this.authService.login(
+      accountType,
+      emailorcode,
+      password,
+    );
+    if (result.code !== '#Success') return res.status(400).json(result);
+    res.cookie('test', 'value', { maxAge: 2 * 60 * 60 * 1000 });
+    res.status(200).json(result);
+    // return { code: '#Success' };
   }
 
   @Post('/signup')
