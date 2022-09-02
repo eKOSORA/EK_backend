@@ -9,6 +9,7 @@ export class ClassObject {
 }
 
 export class Record {
+  id: mongoose.Schema.Types.ObjectId;
   name: string;
   subject: mongoose.Schema.Types.ObjectId;
   date: Date;
@@ -19,10 +20,10 @@ export class Record {
 
 @Schema()
 export class Student {
-  @Prop()
+  @Prop({ type: String })
   names: string;
 
-  @Prop()
+  @Prop({ type: String })
   code: string;
 
   @Prop()
@@ -31,16 +32,16 @@ export class Student {
   @Prop()
   records: Record[];
 
-  @Prop()
+  @Prop({ type: String })
   password: string;
 
-  @Prop()
+  @Prop({ type: String })
   email: string;
 
-  @Prop()
+  @Prop({ type: String })
   parentEmails: string[];
 
-  @Prop()
+  @Prop({ type: String })
   profileLink: string;
 }
 
