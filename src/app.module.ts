@@ -1,5 +1,6 @@
-import { AuthModule } from './auth/auth.module';
-import { Module } from '@nestjs/common';
+import { CookieCheckMW } from './middleware/cookies.middleware';
+import { AuthModule } from './routes/auth/auth.module';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,7 +15,10 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CookieCheckMW).exclude('auth/(.*)');
+  }
   constructor() {
     console.log('SERVER UP AND RUNNING');
   }
