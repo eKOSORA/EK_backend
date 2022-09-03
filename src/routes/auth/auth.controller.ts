@@ -1,4 +1,5 @@
-import { LoginResponse } from './auth.types';
+import { SignupBody } from './signupBody.dto';
+import { DefaultResponse } from './auth.types';
 import { LoginBody } from './loginBody.dto';
 import { AuthService } from './auth.service';
 import {
@@ -20,20 +21,21 @@ export class AuthController {
   async login(
     @Body() { accountType, emailorcode, password }: LoginBody,
     @Res() res: Response,
-  ) {
-    const result: LoginResponse = await this.authService.login(
+  ): Promise<Response> {
+    const result: DefaultResponse = await this.authService.login(
       accountType,
       emailorcode,
       password,
     );
     if (result.code !== '#Success') return res.status(400).json(result);
     res.cookie('test', 'value', { maxAge: 2 * 60 * 60 * 1000 });
-    res.status(200).json(result);
-    // return { code: '#Success' };
+    return res.status(200).json(result);
   }
 
   @Post('/signup')
-  signup() {
-    return { code: '#NotConfigured' };
+  @UsePipes(ValidationPipe)
+  async signup(@Body() body: SignupBody) {
+    const result = await this.authService.signupSchool(body);
+    return result;
   }
 }
