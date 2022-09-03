@@ -56,4 +56,17 @@ export class AuthService {
 
     return { code: '#Success' };
   }
+
+  // async changeRCAStudents() {
+  //   const rca = await this.schoolModel.findOne({ initials: 'RCA' });
+  //   if (!rca) {
+  //     console.log('No RCA found');
+  //     return;
+  //   }
+  //   const rcaStudents = await this.studentModel.updateMany(
+  //     { code: /rca/i },
+  //     { school: rca._id },
+  //   );
+  //   console.log(rcaStudents);
+  // }
 }

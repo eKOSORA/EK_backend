@@ -25,13 +25,13 @@ export class SchoolAddress {
 
 @Schema()
 export class School {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: String, required: true })
   initials: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: SchoolAddress, required: true })
   address: SchoolAddress;
 
   @Prop({ type: String })
@@ -43,8 +43,15 @@ export class School {
   @Prop({ type: String, required: true })
   status: string;
 
-  @Prop({ type: String, required: true, enum: ['Cambridge', 'REB', 'Other'] })
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['Cambridge', 'REB', 'WDA', 'Other'],
+  })
   programme: string;
+
+  @Prop({ type: Date, default: Date.now() })
+  joined: Date;
 }
 
 export const SchoolSchema = SchemaFactory.createForClass(School);

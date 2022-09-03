@@ -1,3 +1,4 @@
+import { School } from './school.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
@@ -22,6 +23,9 @@ export class Record {
 export class Student {
   @Prop({ type: String })
   names: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
+  school: School;
 
   @Prop({ type: String })
   code: string;
