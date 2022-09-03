@@ -1,13 +1,25 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Document } from 'mongoose';
 
 export type SchoolDocument = School & Document;
 
 export class SchoolAddress {
+  @IsNotEmpty()
+  @IsString()
   province: string;
+
+  @IsNotEmpty()
+  @IsString()
   district: string;
+
+  @IsString()
   sector?: string;
+
+  @IsString()
   cell?: string;
+
+  @IsString()
   village?: string;
 }
 
