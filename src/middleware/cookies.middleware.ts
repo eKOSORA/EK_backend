@@ -17,3 +17,11 @@ export class CookieCheckMW implements NestMiddleware {
     }
   }
 }
+
+@Injectable()
+export class RemoveCookiesMW implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    res.cookie('jwt', 'nothing', { maxAge: 1 });
+    next();
+  }
+}

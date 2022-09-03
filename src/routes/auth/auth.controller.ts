@@ -28,8 +28,8 @@ export class AuthController {
       password,
     );
     if (result.code !== '#Success') return res.status(400).json(result);
-    res.cookie('test', 'value', { maxAge: 2 * 60 * 60 * 1000 });
-    return res.status(200).json(result);
+    res.cookie('jwt', { jwt: result.token }, { maxAge: 2 * 60 * 60 * 1000 });
+    return res.status(200).json({ ...result, token: undefined });
   }
 
   @Post('/signup')

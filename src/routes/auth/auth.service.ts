@@ -1,10 +1,11 @@
 import { School, SchoolDocument } from './../../schemas/school.schema';
 import { SignupBody } from './signupBody.dto';
-import { DefaultResponse } from './auth.types';
+import { DefaultResponse, LoginResponse } from './auth.types';
 import { Student, StudentDocument } from '../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -25,21 +26,28 @@ export class AuthService {
     }
   }
 
-  login(
+  async login(
     accountType: string,
     emailorcode: string,
     password: string,
-  ): Promise<DefaultResponse> | DefaultResponse {
+  ): Promise<DefaultResponse> {
+    let response: LoginResponse | null = null;
     switch (accountType) {
       case 'student':
-        return this.loginStudent(emailorcode, password);
+        response = await this.loginStudent(emailorcode, password);
         break;
       default:
-        return { code: '#Error' };
+        response = { code: '#Error' };
     }
+    /* Add token */
+    response.token = jwt.sign(
+      { accountType, id: response.id },
+      process.env.JWT_SECRET,
+    );
+    return response;
   }
 
-  async loginStudent(code: string, password: string): Promise<DefaultResponse> {
+  async loginStudent(code: string, password: string): Promise<LoginResponse> {
     const user = await this.studentModel.findOne({ code });
     if (!user) return { code: '#Error', message: 'Invalid Code Or Password' };
 
