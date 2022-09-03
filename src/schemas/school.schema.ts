@@ -1,8 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export type SchoolDocument = School & Document;
+export type SchoolDocument = School & mongoose.Document;
 
 export class SchoolAddress {
   @IsNotEmpty()
