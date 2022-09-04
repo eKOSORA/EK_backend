@@ -1,6 +1,7 @@
 import { School } from './school.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { Exclude } from 'class-transformer';
 
 export type StudentDocument = Student & mongoose.Document;
 
@@ -50,3 +51,13 @@ export class Student {
 }
 
 export const studentSchema = SchemaFactory.createForClass(Student);
+
+export class SafeStudent extends Student {
+  @Exclude()
+  password: string;
+
+  constructor(partial: Partial<SafeStudent>) {
+    super();
+    Object.assign(this, partial);
+  }
+}
