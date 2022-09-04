@@ -46,7 +46,10 @@ export class School {
   @Prop({
     type: String,
     required: true,
-    enum: ['Cambridge', 'REB', 'WDA', 'Other'],
+    enum: {
+      values: ['Cambridge', 'REB', 'WDA', 'Other'],
+      message: '{VALUE} is not a valid choice of programme',
+    },
   })
   programme: string;
 
