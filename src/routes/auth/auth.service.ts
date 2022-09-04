@@ -1,3 +1,4 @@
+import { Educator, EducatorDocument } from './../../schemas/educator.schema';
 import { Parent, ParentDocument } from './../../schemas/parent.schema';
 import { School, SchoolDocument } from './../../schemas/school.schema';
 import { SignupBody } from './signupBody.dto';
@@ -17,6 +18,8 @@ export class AuthService {
     private readonly schoolModel: Model<SchoolDocument>,
     @InjectModel(Parent.name)
     private readonly parentModel: Model<ParentDocument>,
+    @InjectModel(Educator.name)
+    private readonly educatorModel: Model<EducatorDocument>,
   ) {}
 
   async signupSchool(body: SignupBody): Promise<DefaultResponse> {
@@ -39,6 +42,12 @@ export class AuthService {
       case 'student':
         response = await this.loginStudent(emailorcode, password);
         break;
+      case 'educator':
+        response = await this.loginStudent(emailorcode, password);
+        break;
+      case 'parent':
+        response = await this.loginStudent(emailorcode, password);
+        break;
       default:
         response = { code: '#Error' };
     }
@@ -57,18 +66,50 @@ export class AuthService {
     if (user.password !== password)
       return { code: '#Error', message: 'Invalid Code Or Password' };
 
-    return { code: '#Success' };
+    return { code: '#Success', id: user._id };
   }
 
-  async changeRCAParents() {
-    const rcaParents = await this.parentModel.find({});
-    for (const parent of rcaParents) {
-      const children = parent.children?.map(
-        (child: any) => new mongoTypes.ObjectId(child),
-      );
-      console.log(
-        await this.parentModel.updateOne({ _id: parent._id }, { children }),
-      );
-    }
+  async loginParent(
+    emailorphone: string,
+    password: string,
+  ): Promise<LoginResponse> {
+    const user = await this.parentModel.findOne({
+      $or: [{ email: emailorphone }, { tel: emailorphone }],
+    });
+    if (!user)
+      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+
+    if (user.password !== password)
+      return { code: '#Error', message: 'Invalid Code Or Password' };
+
+    return { code: '#Success', id: user._id };
   }
+
+  async loginEducator(
+    emailorphone: string,
+    password: string,
+  ): Promise<LoginResponse> {
+    const user = await this.educatorModel.findOne({
+      $or: [{ email: emailorphone }, { tel: emailorphone }],
+    });
+    if (!user)
+      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+
+    if (user.password !== password)
+      return { code: '#Error', message: 'Invalid Code Or Password' };
+
+    return { code: '#Success', id: user._id };
+  }
+
+  // async changeRCAParents() {
+  //   const rcaParents = await this.parentModel.find({});
+  //   for (const parent of rcaParents) {
+  //     const children = parent.children?.map(
+  //       (child: any) => new mongoTypes.ObjectId(child),
+  //     );
+  //     console.log(
+  //       await this.parentModel.updateOne({ _id: parent._id }, { children }),
+  //     );
+  //   }
+  // }
 }

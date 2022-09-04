@@ -18,7 +18,7 @@ export class Educator {
   @Prop({ type: String })
   tel: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, unique: true })
   email: string;
 
   @Prop({ type: String })
