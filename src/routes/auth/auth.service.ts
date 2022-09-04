@@ -1,10 +1,11 @@
+import { Parent, ParentDocument } from './../../schemas/parent.schema';
 import { School, SchoolDocument } from './../../schemas/school.schema';
 import { SignupBody } from './signupBody.dto';
 import { DefaultResponse, LoginResponse } from './auth.types';
 import { Student, StudentDocument } from '../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types as mongoTypes } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
@@ -14,6 +15,8 @@ export class AuthService {
     private readonly studentModel: Model<StudentDocument>,
     @InjectModel(School.name)
     private readonly schoolModel: Model<SchoolDocument>,
+    @InjectModel(Parent.name)
+    private readonly parentModel: Model<ParentDocument>,
   ) {}
 
   async signupSchool(body: SignupBody): Promise<DefaultResponse> {
@@ -57,16 +60,15 @@ export class AuthService {
     return { code: '#Success' };
   }
 
-  // async changeRCAStudents() {
-  //   const rca = await this.schoolModel.findOne({ initials: 'RCA' });
-  //   if (!rca) {
-  //     console.log('No RCA found');
-  //     return;
-  //   }
-  //   const rcaStudents = await this.studentModel.updateMany(
-  //     { code: /rca/i },
-  //     { school: rca._id },
-  //   );
-  //   console.log(rcaStudents);
-  // }
+  async changeRCAParents() {
+    const rcaParents = await this.parentModel.find({});
+    for (const parent of rcaParents) {
+      const children = parent.children?.map(
+        (child: any) => new mongoTypes.ObjectId(child),
+      );
+      console.log(
+        await this.parentModel.updateOne({ _id: parent._id }, { children }),
+      );
+    }
+  }
 }

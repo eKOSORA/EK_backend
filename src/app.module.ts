@@ -1,3 +1,4 @@
+import { Parent, ParentSchema } from './schemas/parent.schema';
 import {
   CookieCheckMW,
   RemoveCookiesMW,
