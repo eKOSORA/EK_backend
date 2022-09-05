@@ -1,4 +1,4 @@
-import { AdminGuard } from './../../guards/admin.guard';
+import { OnlyAdminGuard } from './../../guards/admin.guard';
 import {
   Controller,
   Get,
@@ -10,10 +10,16 @@ import { JWTToken } from '../../custom/custom.decorators';
 
 @Controller('student')
 export class StudentController {
+  /**
+   * Fetch all students in a specified class and year/grade in the school of the currently logged in user
+   * @param token object that contains info about the request source
+   * @param year
+   * @param _class
+   */
   @Get('/getAll')
-  @UseGuards(AdminGuard)
+  @UseGuards(OnlyAdminGuard)
   getStudentsByClass(
-    @JWTToken() token: string,
+    @JWTToken() token: object,
     @Query('year', ParseIntPipe) year: number,
     @Query('class') _class: string,
   ) {
