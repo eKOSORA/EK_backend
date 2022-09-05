@@ -36,7 +36,11 @@ export class AuthService {
     accountType: string,
     emailorcode: string,
     password: string,
+    school?: string,
   ): Promise<DefaultResponse> {
+    if (!school && accountType !== 'parent')
+      return { code: '#Error', message: 'Missing school id' };
+
     let response: LoginResponse | null = null;
     switch (accountType) {
       case 'student':

@@ -1,3 +1,4 @@
+import { Educator, EducatorSchema } from '../../schemas/educator.schema';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { Module } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { Student, studentSchema } from '../../schemas/student.schema';
       { name: Student.name, schema: studentSchema },
       { name: School.name, schema: SchoolSchema },
       { name: Parent.name, schema: ParentSchema },
+      { name: Educator.name, schema: EducatorSchema },
     ]),
   ],
   controllers: [AuthController],

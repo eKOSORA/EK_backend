@@ -24,7 +24,7 @@ export class Educator {
   @Prop({ type: String })
   password: string;
 
-  @Prop({ type: [Subject] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }] })
   subjects: Subject[];
 
   @Prop({ type: String })

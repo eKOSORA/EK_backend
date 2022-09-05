@@ -1,5 +1,4 @@
 import { AdminModule } from './routes/admin/admin.module';
-import { Parent, ParentSchema } from './schemas/parent.schema';
 import {
   CookieCheckMW,
   RemoveCookiesMW,
@@ -11,6 +10,9 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { StudentModule } from './routes/student/student.module';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const chalk = require('chalk');
 
 @Module({
   imports: [
@@ -25,10 +27,10 @@ import { StudentModule } from './routes/student/student.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CookieCheckMW).exclude('auth/(.*)');
+    consumer.apply(CookieCheckMW).exclude('auth(.*)').forRoutes('*');
     consumer.apply(RemoveCookiesMW).forRoutes('auth/(.*)');
   }
   constructor() {
-    console.log('SERVER UP AND RUNNING');
+    console.log(chalk.yellow('Starting up...'));
   }
 }

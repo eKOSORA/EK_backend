@@ -19,17 +19,22 @@ export class AuthController {
   @Post('/login')
   @UsePipes(ValidationPipe)
   async login(
-    @Body() { accountType, emailorcode, password }: LoginBody,
+    @Body() { accountType, emailorcode, password, school }: LoginBody,
     @Res() res: Response,
   ): Promise<Response> {
     const result: DefaultResponse = await this.authService.login(
       accountType,
       emailorcode,
       password,
+      school,
     );
-    if (result.code !== '#Success') return res.status(400).json(result);
-    res.cookie('jwt', { jwt: result.token }, { maxAge: 2 * 60 * 60 * 1000 });
-    return res.status(200).json({ ...result, token: undefined });
+    if (result.code !== '#Success')
+      return res
+        .status(400)
+        .json({ ...result, token: undefined, id: undefined });
+
+    res.cookie('jwt', result.token, { maxAge: 2 * 60 * 60 * 1000 });
+    return res.status(200).json({ ...result, token: undefined, id: undefined });
   }
 
   @Post('/signup')

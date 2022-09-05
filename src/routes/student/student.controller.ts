@@ -1,11 +1,19 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
-import { Cookies } from 'src/customDecorators/custom.decorators';
+import { AdminGuard } from './../../guards/admin.guard';
+import {
+  Controller,
+  Get,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { JWTToken } from '../../custom/custom.decorators';
 
 @Controller('student')
 export class StudentController {
   @Get('/getAll')
+  @UseGuards(AdminGuard)
   getStudentsByClass(
-    @Cookies('jwt') token: string,
+    @JWTToken() token: string,
     @Query('year', ParseIntPipe) year: number,
     @Query('class') _class: string,
   ) {

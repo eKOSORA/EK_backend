@@ -4,9 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { Module } from '@nestjs/common';
-import { Educator, EducatorSchema } from 'src/schemas/educator.schema';
-import { School, SchoolSchema } from 'src/schemas/school.schema';
-import { Parent, ParentSchema } from 'src/schemas/parent.schema';
+import { Educator, EducatorSchema } from './../../schemas/educator.schema';
+import { School, SchoolSchema } from './../../schemas/school.schema';
+import { Parent, ParentSchema } from './../../schemas/parent.schema';
 
 @Module({
   imports: [

@@ -12,7 +12,7 @@ export class Subject {
   @Prop({ type: String })
   code: string;
 
-  @Prop({ type: [School] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'School' }] })
   schools: School[];
 }
 
