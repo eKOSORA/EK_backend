@@ -1,3 +1,4 @@
+import { AdminModule } from './routes/admin/admin.module';
 import { Parent, ParentSchema } from './schemas/parent.schema';
 import {
   CookieCheckMW,
@@ -9,12 +10,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { StudentModule } from './routes/student/student.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env.local' }),
     MongooseModule.forRoot(process.env.DB_CONN_STR),
     AuthModule,
+    AdminModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
