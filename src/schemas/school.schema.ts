@@ -25,23 +25,15 @@ export class SchoolAddress {
 
 @Schema()
 export class School {
+  /* =====> PART 1: BASIC INFO */
   @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: String, required: true })
   initials: string;
 
-  @Prop({ type: SchoolAddress, required: true })
-  address: SchoolAddress;
-
-  @Prop({ type: String })
-  moto?: string;
-
-  @Prop({ type: String })
-  head?: string;
-
   @Prop({ type: String, required: true })
-  status: string;
+  type: string;
 
   @Prop({
     type: String,
@@ -52,6 +44,22 @@ export class School {
     },
   })
   programme: string;
+
+  /* =====> PART 2: WHEREABOUTS */
+
+  @Prop({ type: SchoolAddress, required: true })
+  address: SchoolAddress;
+
+  /* =====> PART 3: MORE ABOUT THE SCHOOL */
+
+  @Prop({ type: String })
+  head?: string;
+
+  @Prop({ type: String })
+  moto?: string;
+
+  @Prop({ type: String })
+  profileLink: string;
 
   @Prop({ type: Date, default: Date.now() })
   joined: Date;
