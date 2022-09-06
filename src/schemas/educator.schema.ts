@@ -12,8 +12,8 @@ export class Educator {
   @Prop({ type: String })
   code: string;
 
-  @Prop({ type: String })
-  title: string;
+  @Prop({ type: [String] })
+  title: string[];
 
   @Prop({ type: String })
   tel: string;
