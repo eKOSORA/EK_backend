@@ -1,3 +1,4 @@
+import { School } from './school.schema';
 import { Subject } from './subject.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
@@ -23,6 +24,9 @@ export class Educator {
 
   @Prop({ type: String })
   password: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
+  school: School;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }] })
   subjects: Subject[];
