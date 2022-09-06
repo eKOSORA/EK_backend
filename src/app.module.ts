@@ -1,3 +1,4 @@
+import { infoEmoji } from './config/oneliners';
 import { AdminModule } from './routes/admin/admin.module';
 import {
   CookieCheckMW,
@@ -31,6 +32,6 @@ export class AppModule implements NestModule {
     consumer.apply(RemoveCookiesMW).forRoutes('auth/(.*)');
   }
   constructor() {
-    console.log(chalk.yellow('Starting up...'));
+    console.log(chalk.yellow(infoEmoji, 'Starting up...'));
   }
 }

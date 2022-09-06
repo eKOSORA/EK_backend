@@ -1,4 +1,4 @@
-import { red, checkEmoji, yellow } from './../config/oneliners';
+import { red, checkEmoji, yellow, errorEmoji } from './../config/oneliners';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
@@ -15,7 +15,7 @@ export class CookieCheckMW implements NestMiddleware {
       req.jwt = decoded;
       next();
     } catch (e) {
-      console.log('  ', red(e.message));
+      console.log(errorEmoji, red(e.message));
       return res.status(403).json({ code: '#NoToken', message: e.message });
     }
   }
