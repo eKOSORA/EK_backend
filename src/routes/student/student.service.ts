@@ -5,7 +5,7 @@ import {
 } from './../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class StudentService {
@@ -13,14 +13,18 @@ export class StudentService {
     @InjectModel(Student.name)
     private readonly studentModel: Model<StudentDocument>,
   ) {}
-  async getStudentsByClass(schoolId, year, _class) {
-    const students = await this.studentModel.find({
-      school: schoolId,
-      class: { _year: year, _class },
-    });
+  async getStudentsByClass(schoolId: string, year: number, _class: string) {
+    const students = await this.studentModel
+      .find({
+        school: new Types.ObjectId(schoolId),
+        $and: [{ 'class._class': _class }, { 'class._year': Number(year) }],
+      })
+      .lean({ options: { _id: true } })
+      .populate({ path: 'school', select: ['name', 'initials'] });
+
     const safeStudents: SafeStudent[] = students.map(
-      (student) => new SafeStudent(student),
+      (student) => new SafeStudent(student, 'records', 'password'),
     );
-    return safeStudents;
+    return JSON.parse(JSON.stringify(safeStudents));
   }
 }

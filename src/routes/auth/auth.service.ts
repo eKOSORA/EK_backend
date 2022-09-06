@@ -6,7 +6,7 @@ import { DefaultResponse, LoginResponse } from './auth.types';
 import { Student, StudentDocument } from '../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types as mongoTypes } from 'mongoose';
+import { Model } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
@@ -44,10 +44,10 @@ export class AuthService {
     let response: LoginResponse | null = null;
     switch (accountType) {
       case 'student':
-        response = await this.loginStudent(emailorcode, password);
+        response = await this.loginStudent(emailorcode, password, school);
         break;
       case 'educator':
-        response = await this.loginEducator(emailorcode, password);
+        response = await this.loginEducator(emailorcode, password, school);
         break;
       case 'parent':
         response = await this.loginParent(emailorcode, password);
@@ -57,14 +57,23 @@ export class AuthService {
     }
     /* Add token */
     response.token = jwt.sign(
-      { accountType, id: response.id, isAdmin: !!response.isAdmin },
+      {
+        accountType,
+        id: response.id,
+        isAdmin: !!response.isAdmin,
+        schoolId: school,
+      },
       process.env.JWT_SECRET,
     );
     return response;
   }
 
-  async loginStudent(code: string, password: string): Promise<LoginResponse> {
-    const user = await this.studentModel.findOne({ code });
+  async loginStudent(
+    code: string,
+    password: string,
+    schoolId: string,
+  ): Promise<LoginResponse> {
+    const user = await this.studentModel.findOne({ code, school: schoolId });
     if (!user) return { code: '#Error', message: 'Invalid Code Or Password' };
 
     if (user.password !== password)
@@ -92,8 +101,10 @@ export class AuthService {
   async loginEducator(
     emailorphone: string,
     password: string,
+    schoolId: string,
   ): Promise<LoginResponse> {
     const user = await this.educatorModel.findOne({
+      school: schoolId,
       $or: [{ email: emailorphone }, { tel: emailorphone }],
     });
     if (!user)
@@ -109,15 +120,27 @@ export class AuthService {
     };
   }
 
-  // async changeRCAParents() {
-  //   const rcaParents = await this.parentModel.find({});
-  //   for (const parent of rcaParents) {
-  //     const children = parent.children?.map(
-  //       (child: any) => new mongoTypes.ObjectId(child),
-  //     );
-  //     console.log(
-  //       await this.parentModel.updateOne({ _id: parent._id }, { children }),
-  //     );
-  //   }
-  // }
+  async changeRCAStudents() {
+    const rca = await this.schoolModel.findOne({ initials: /rca/i });
+    const rcaStudents = await this.studentModel.find({ school: rca._id });
+    console.log(rcaStudents.length);
+
+    for (const _student of rcaStudents) {
+      const student: any = _student;
+      await this.studentModel.updateOne(
+        {
+          _id: student._id,
+        },
+        {
+          class: {
+            _class: student.class.class,
+            _year: student.class.year,
+            year: undefined,
+            class: undefined,
+          },
+        },
+      );
+      console.log('done with ', student.names);
+    }
+  }
 }

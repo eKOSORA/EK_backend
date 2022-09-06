@@ -1,3 +1,4 @@
+import { obj_without } from './../config/oneliners';
 import { SchoolTerm } from './term.schema';
 import { School } from './school.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
@@ -73,12 +74,26 @@ export class Student {
 
 export const studentSchema = SchemaFactory.createForClass(Student);
 
-export class SafeStudent extends Student {
+interface StudentInterface extends Student {
+  foo?: string;
+}
+
+export class SafeStudent implements StudentInterface {
   @Exclude()
   password: string;
 
-  constructor(partial: Partial<SafeStudent>) {
-    super();
-    Object.assign(this, partial);
+  _id?: string;
+  foo?: string;
+  names: string;
+  school: School;
+  code: string;
+  class: ClassObject;
+  records: Record[];
+  email: string;
+  parentEmails: string[];
+  profileLink: string;
+
+  constructor(partial: Partial<SafeStudent>, ...without: string[]) {
+    Object.assign(this, obj_without(partial, ...without));
   }
 }
