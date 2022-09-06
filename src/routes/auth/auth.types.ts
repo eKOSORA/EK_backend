@@ -6,4 +6,5 @@ export interface DefaultResponse {
 
 export interface LoginResponse extends DefaultResponse {
   id?: string;
+  isAdmin?: boolean;
 }

@@ -1,3 +1,4 @@
+import { Jwt } from './../../config/global.interface';
 import { OnlyAdminGuard } from './../../guards/admin.guard';
 import {
   Controller,
@@ -19,10 +20,11 @@ export class StudentController {
   @Get('/getAll')
   @UseGuards(OnlyAdminGuard)
   getStudentsByClass(
-    @JWTToken() token: object,
+    @JWTToken() token: Jwt,
     @Query('year', ParseIntPipe) year: number,
     @Query('class') _class: string,
   ) {
     console.log(token, year, _class);
+    return { code: '#Success' };
   }
 }

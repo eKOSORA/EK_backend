@@ -47,17 +47,17 @@ export class AuthService {
         response = await this.loginStudent(emailorcode, password);
         break;
       case 'educator':
-        response = await this.loginStudent(emailorcode, password);
+        response = await this.loginEducator(emailorcode, password);
         break;
       case 'parent':
-        response = await this.loginStudent(emailorcode, password);
+        response = await this.loginParent(emailorcode, password);
         break;
       default:
         response = { code: '#Error' };
     }
     /* Add token */
     response.token = jwt.sign(
-      { accountType, id: response.id },
+      { accountType, id: response.id, isAdmin: !!response.isAdmin },
       process.env.JWT_SECRET,
     );
     return response;
@@ -84,7 +84,7 @@ export class AuthService {
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
 
     if (user.password !== password)
-      return { code: '#Error', message: 'Invalid Code Or Password' };
+      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
 
     return { code: '#Success', id: user._id };
   }
@@ -100,9 +100,13 @@ export class AuthService {
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
 
     if (user.password !== password)
-      return { code: '#Error', message: 'Invalid Code Or Password' };
-
-    return { code: '#Success', id: user._id };
+      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+    const titles = Array.isArray(user.title) ? user.title : [user.title];
+    return {
+      code: '#Success',
+      id: user._id,
+      isAdmin: titles.includes('admin'),
+    };
   }
 
   // async changeRCAParents() {
