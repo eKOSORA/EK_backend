@@ -32,18 +32,25 @@ export class School {
   @Prop({ type: String, required: true })
   initials: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({
+    type: String,
+    required: true,
+    enum: {
+      values: ['government-aided', 'government', 'private'],
+      message: '{VALUE} is not a valid school type',
+    },
+  })
   type: string;
 
   @Prop({
-    type: String,
+    type: [String],
     required: true,
     enum: {
       values: ['Cambridge', 'REB', 'WDA', 'Other'],
       message: '{VALUE} is not a valid choice of programme',
     },
   })
-  programme: string;
+  programme: string[];
 
   /* =====> PART 2: WHEREABOUTS */
 
