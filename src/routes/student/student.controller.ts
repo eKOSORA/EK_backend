@@ -3,18 +3,17 @@ import { Jwt } from './../../config/global.interface';
 import { OnlyAdminGuard } from './../../guards/admin.guard';
 import {
   ClassSerializerInterceptor,
-  Controller,
   Get,
   ParseIntPipe,
   Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { JWTToken } from '../../custom/custom.decorators';
+import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('student')
-@Controller('student')
+@ProtectedController('jwt', 'student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
   /**

@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const chalk = require('chalk');
 
@@ -18,3 +20,13 @@ export const obj_without = (obj: object, ...remove: string[]) => {
 };
 
 export const deep_stringify = (obj: object) => JSON.parse(JSON.stringify(obj));
+export const isProd = () => process.env.NODE_ENV === 'production';
+
+export const sys_notification = async (title = 'nestjs', message = '') => {
+  try {
+    console.log(`notify-send "${title}" "${message}"`);
+    exec(`notify-send "${title}" "${message}"`);
+  } catch (e) {
+    console.log(red(errorEmoji, 'Failed to send notification'));
+  }
+};

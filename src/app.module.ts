@@ -6,7 +6,6 @@ import {
 } from './middleware/cookies.middleware';
 import { AuthModule } from './routes/auth/auth.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
@@ -23,7 +22,7 @@ const chalk = require('chalk');
     AdminModule,
     StudentModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule implements NestModule {

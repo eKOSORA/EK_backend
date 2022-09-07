@@ -1,4 +1,10 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  applyDecorators,
+  createParamDecorator,
+  ExecutionContext,
+  Controller,
+} from '@nestjs/common';
+import { ApiCookieAuth } from '@nestjs/swagger';
 
 export const Cookies = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
@@ -13,3 +19,7 @@ export const JWTToken = createParamDecorator(
     return request.jwt;
   },
 );
+
+export const ProtectedController = (ck: string, ctl: string) => {
+  return applyDecorators(ApiCookieAuth(ck), Controller(ctl));
+};
