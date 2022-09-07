@@ -16,3 +16,5 @@ export const obj_without = (obj: object, ...remove: string[]) => {
   }
   return newObject;
 };
+
+export const deep_stringify = (obj: object) => JSON.parse(JSON.stringify(obj));

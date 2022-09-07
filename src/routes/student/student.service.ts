@@ -1,3 +1,4 @@
+import { deep_stringify } from './../../config/oneliners';
 import {
   Student,
   StudentDocument,
@@ -25,6 +26,6 @@ export class StudentService {
     const safeStudents: SafeStudent[] = students.map(
       (student) => new SafeStudent(student, 'records', 'password'),
     );
-    return JSON.parse(JSON.stringify(safeStudents));
+    return deep_stringify(safeStudents);
   }
 }
