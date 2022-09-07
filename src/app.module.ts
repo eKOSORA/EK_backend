@@ -16,7 +16,7 @@ const chalk = require('chalk');
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '.env.local' }),
+    ConfigModule.forRoot({ envFilePath: '.env' }),
     MongooseModule.forRoot(process.env.DB_CONN_STR),
     AuthModule,
     AdminModule,
