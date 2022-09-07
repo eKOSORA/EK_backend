@@ -11,7 +11,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { JWTToken } from '../../custom/custom.decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('student')
 @Controller('student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}

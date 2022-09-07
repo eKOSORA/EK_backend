@@ -1,5 +1,5 @@
 import { SignupBody } from './signupBody.dto';
-import { DefaultResponse } from './auth.types';
+import { DefaultResponse, ErrorResponse, SuccessResponse } from './auth.types';
 import { LoginBody } from './loginBody.dto';
 import { AuthService } from './auth.service';
 import {
@@ -11,13 +11,25 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   @UsePipes(ValidationPipe)
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully logged in',
+    type: SuccessResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Something went wrong.',
+    type: ErrorResponse,
+  })
   async login(
     @Body() { accountType, emailorcode, password, school }: LoginBody,
     @Res() res: Response,
