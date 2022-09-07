@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JWTToken } from 'src/custom/custom.decorators';
 
 @ApiTags('auth')
 @Controller('auth')
