@@ -38,41 +38,41 @@ export class StudentController {
 
   @Post('/add')
   addStudents() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/edit')
   editStudents() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/addRecord')
   newRecord() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/updateMark')
   updateMark() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/getRecords')
   getRecords() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Delete('/deleteRecord')
   deleteRecord() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/addParent')
   addParent() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/getSummary')
   getSummary() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 }

@@ -1,25 +1,27 @@
 import { Post } from '@nestjs/common';
-import { ProtectedController } from 'src/custom/custom.decorators';
+import { ApiTags } from '@nestjs/swagger';
+import { ProtectedController } from '../../custom/custom.decorators';
 
 @ProtectedController('jwt', 'educator')
+@ApiTags('parent')
 export class ParentController {
   @Post('/getInfo')
   getParentInfo() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/add')
   addParent() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/register')
   registerParent() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 
   @Post('/addChild')
   addChild() {
-    return { code: '#UnDocument' };
+    return { code: '#UnDocumented' };
   }
 }

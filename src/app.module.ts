@@ -1,3 +1,7 @@
+import { ParentModule } from './routes/parent/parent.module';
+import { SettingsModule } from './routes/settings/settings.module';
+import { AnnouncementModule } from './routes/announcement/announcement.module';
+import { EducatorModule } from './routes/educator/educator.module';
 import { AppController } from './app.controller';
 import { infoEmoji } from './config/oneliners';
 import { AdminModule } from './routes/admin/admin.module';
@@ -22,6 +26,10 @@ const chalk = require('chalk');
     AuthModule,
     AdminModule,
     StudentModule,
+    EducatorModule,
+    ParentModule,
+    AnnouncementModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
