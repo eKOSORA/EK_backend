@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsMongoId, IsNotEmpty, ValidateIf } from 'class-validator';
 export class LoginBody {
   @IsNotEmpty()
@@ -15,6 +15,6 @@ export class LoginBody {
 
   @ValidateIf(({ school }) => !!school)
   @IsMongoId({ message: 'school paremeter must be a mongodb ID' })
-  @ApiProperty()
+  @ApiPropertyOptional()
   school?: string;
 }

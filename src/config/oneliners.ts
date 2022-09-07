@@ -24,7 +24,6 @@ export const isProd = () => process.env.NODE_ENV === 'production';
 
 export const sys_notification = async (title = 'nestjs', message = '') => {
   try {
-    console.log(`notify-send "${title}" "${message}"`);
     exec(`notify-send "${title}" "${message}"`);
   } catch (e) {
     console.log(red(errorEmoji, 'Failed to send notification'));

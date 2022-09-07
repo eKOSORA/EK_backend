@@ -21,6 +21,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const config = new DocumentBuilder()
+    .addCookieAuth('jwt')
     .setTitle('eKOSORA docs')
     .setDescription('The next URUBUTO but better.')
     .setVersion('2.0')
