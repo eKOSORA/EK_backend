@@ -5,13 +5,15 @@ import { AuthService } from './auth.service';
 import {
   Body,
   Controller,
+  Get,
   Post,
   Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JWTToken } from 'src/custom/custom.decorators';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -59,5 +61,17 @@ export class AuthController {
   async signup(@Body() body: SignupBody) {
     const result = await this.authService.signupSchool(body);
     return result;
+  }
+
+  @Get('/logout')
+  @ApiOkResponse({
+    description: 'Successfully logged out',
+    type: SuccessResponse,
+  })
+  logout(@Res() res: Response) {
+    res.cookie('jwt', 'none', { maxAge: 1 });
+    res
+      .status(200)
+      .json({ code: '#Success', message: 'Successfully logged out' });
   }
 }

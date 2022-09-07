@@ -1,3 +1,4 @@
+import { AppController } from './app.controller';
 import { infoEmoji } from './config/oneliners';
 import { AdminModule } from './routes/admin/admin.module';
 import {
@@ -22,7 +23,7 @@ const chalk = require('chalk');
     AdminModule,
     StudentModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {

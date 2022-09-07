@@ -1,14 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Get } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { ProtectedController } from './custom/custom.decorators';
 
-@Controller()
+@ProtectedController('jwt', '')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): object {
+  @ApiOkResponse({ description: 'Valid token' })
+  check(): object {
     return {
-      code: '#UnDocumentRoute',
+      code: '#Authorized',
     };
   }
 }

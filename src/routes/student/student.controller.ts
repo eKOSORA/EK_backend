@@ -4,10 +4,12 @@ import { OnlyAdminGuard } from './../../guards/admin.guard';
 import {
   ClassSerializerInterceptor,
   Get,
+  Post,
   ParseIntPipe,
   Query,
   UseGuards,
   UseInterceptors,
+  Delete,
 } from '@nestjs/common';
 import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,5 +34,45 @@ export class StudentController {
   ) {
     return this.studentService.getStudentsByClass(token.schoolId, year, _class);
     return { code: '#Success' };
+  }
+
+  @Post('/add')
+  addStudents() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/edit')
+  editStudents() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/addRecord')
+  newRecord() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/updateMark')
+  updateMark() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/getRecords')
+  getRecords() {
+    return { code: '#UnDocument' };
+  }
+
+  @Delete('/deleteRecord')
+  deleteRecord() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/addParent')
+  addParent() {
+    return { code: '#UnDocument' };
+  }
+
+  @Post('/getSummary')
+  getSummary() {
+    return { code: '#UnDocument' };
   }
 }
