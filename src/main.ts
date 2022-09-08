@@ -25,7 +25,12 @@ async function bootstrap() {
     .setTitle('eKOSORA docs')
     .setDescription('The next URUBUTO but better.')
     .setVersion('2.0')
-    .addTag('auth')
+    .addTag('auth', 'Authentication related routes')
+    .addTag('student', 'Student related routes')
+    .addTag('educator', 'Educator related routes')
+    .addTag('parent', 'Parent related routes')
+    .addTag('announcement', 'Announcement related routes')
+    .addTag('settings', 'Settings related routes')
     .build();
 
   const options: SwaggerDocumentOptions = {

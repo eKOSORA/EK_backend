@@ -2,7 +2,7 @@ import { Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ProtectedController } from '../../custom/custom.decorators';
 
-@ProtectedController('jwt', 'educator')
+@ProtectedController('jwt', 'parent')
 @ApiTags('parent')
 export class ParentController {
   @Post('/getInfo')
