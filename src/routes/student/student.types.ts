@@ -43,14 +43,26 @@ export class AddStudentBody {
 }
 
 export class LessStudentBody {
+  @ApiProperty({})
   names?: string;
+
+  @ApiProperty({})
   code?: string;
+
+  @ApiProperty({ type: ClassObject })
   class?: ClassObject;
+
+  @ApiProperty({})
   email?: string;
+
+  @ApiProperty({})
   parentEmails?: string[];
 }
 
 export class EditStudentBody {
-  studentId: mongoose.Types.ObjectId;
+  @ApiProperty()
+  studentId: string;
+
+  @ApiProperty({ type: LessStudentBody })
   updates: LessStudentBody;
 }

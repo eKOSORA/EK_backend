@@ -1,4 +1,4 @@
-import { StudentBody } from './student.types';
+import { StudentBody, LessStudentBody } from './student.types';
 import { deep_stringify } from './../../config/oneliners';
 import {
   Student,
@@ -39,6 +39,33 @@ export class StudentService {
     try {
       await this.studentModel.insertMany(students);
       return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async editStudents(
+    schoolId: string,
+    studentId: string,
+    updates: LessStudentBody,
+  ) {
+    try {
+      const found = !!(await this.studentModel.findOneAndUpdate(
+        {
+          school: schoolId,
+          _id: studentId,
+        },
+        {
+          ...updates,
+        },
+      ));
+
+      return found
+        ? { code: '#Success' }
+        : {
+            code: '#Error',
+            message: 'Something went wrong. Please check your information',
+          };
     } catch (e) {
       return { code: '#Error', message: e.message };
     }
