@@ -5,14 +5,17 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Exclude } from 'class-transformer';
 import { Subject } from './subject.schema';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type StudentDocument = Student & mongoose.Document;
 
 export class ClassObject {
   @Prop({ type: Number })
+  @ApiProperty()
   _year: number;
 
   @Prop({ type: String })
+  @ApiProperty()
   _class: string;
 }
 
@@ -56,16 +59,16 @@ export class Student {
   @Prop()
   class: ClassObject;
 
-  @Prop()
+  @Prop({ default: [] })
   records: Record[];
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: process.env.DEFAULT_PASSWORD })
   password: string;
 
   @Prop({ type: String, unique: true })
   email: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: [] })
   parentEmails: string[];
 
   @Prop({ type: String })

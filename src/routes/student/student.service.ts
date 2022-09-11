@@ -1,3 +1,4 @@
+import { StudentBody } from './student.types';
 import { deep_stringify } from './../../config/oneliners';
 import {
   Student,
@@ -27,5 +28,19 @@ export class StudentService {
       (student) => new SafeStudent(student, 'records', 'password'),
     );
     return deep_stringify(safeStudents);
+  }
+
+  async addStudents(schoolId: string, students: StudentBody[]) {
+    students = students.map((student) => ({
+      ...student,
+      school: new Types.ObjectId(schoolId),
+    }));
+
+    try {
+      await this.studentModel.insertMany(students);
+      return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { AddStudentBody } from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
 import { OnlyAdminGuard } from './../../guards/admin.guard';
@@ -10,9 +11,11 @@ import {
   UseGuards,
   UseInterceptors,
   Delete,
+  Body,
 } from '@nestjs/common';
 import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ErrorResponse, SuccessResponse } from '../auth/auth.types';
 
 @ApiTags('student')
 @ProtectedController('jwt', 'student')
@@ -37,8 +40,18 @@ export class StudentController {
   }
 
   @Post('/add')
-  addStudents() {
-    return { code: '#UnDocumented' };
+  @UseGuards(OnlyAdminGuard)
+  @ApiOkResponse({
+    description: 'Successfully added students',
+    type: SuccessResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Failed to add students',
+    type: ErrorResponse,
+  })
+  addStudents(@JWTToken() token: Jwt, @Body() body: AddStudentBody) {
+    return this.studentService.addStudents(token.schoolId, body.students);
   }
 
   @Post('/edit')
