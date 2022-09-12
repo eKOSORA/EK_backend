@@ -1,4 +1,4 @@
-import { StudentBody, LessStudentBody } from './student.types';
+import { StudentBody, LessStudentBody, AddRecordBody } from './student.types';
 import { deep_stringify } from './../../config/oneliners';
 import {
   Student,
@@ -66,6 +66,36 @@ export class StudentService {
             code: '#Error',
             message: 'Something went wrong. Please check your information',
           };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async newRecord(schoolId: string, recordInfo: AddRecordBody) {
+    // if (recordInfo.term === 'current') {
+    //   recordInfo.term = await this.
+    // }
+    try {
+      await this.studentModel.updateMany(
+        {
+          school: schoolId,
+          'class._class': recordInfo._class,
+          'class._year': recordInfo._year,
+        },
+        {
+          $push: {
+            records: {
+              name: recordInfo.name,
+              subject: recordInfo.subject,
+              max: recordInfo.max,
+              reversed: recordInfo.reversed,
+              date: recordInfo.date,
+              term: recordInfo.term,
+            },
+          },
+        },
+      );
+      return { code: '#Success' };
     } catch (e) {
       return { code: '#Error', message: e.message };
     }

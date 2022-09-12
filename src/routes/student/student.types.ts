@@ -66,3 +66,37 @@ export class EditStudentBody {
   @ApiProperty({ type: LessStudentBody })
   updates: LessStudentBody;
 }
+
+export class AddRecordBody {
+  @ApiProperty()
+  @IsNotEmpty()
+  _class: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  _year: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  subject: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  max: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  reversed: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  date: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  term: string | mongoose.Types.ObjectId;
+}

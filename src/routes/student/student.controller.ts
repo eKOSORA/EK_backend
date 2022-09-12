@@ -1,4 +1,8 @@
-import { AddStudentBody, EditStudentBody } from './student.types';
+import {
+  AddStudentBody,
+  EditStudentBody,
+  AddRecordBody,
+} from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
 import { OnlyAdminGuard } from './../../guards/admin.guard';
@@ -73,7 +77,16 @@ export class StudentController {
   }
 
   @Post('/addRecord')
-  newRecord() {
+  @ApiOkResponse({
+    description: 'Successfully edited student info',
+    type: SuccessResponse,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Something went wrong.',
+    type: ErrorResponse,
+  })
+  newRecord(@JWTToken() token: Jwt, @Body() body: AddRecordBody) {
     return { code: '#UnDocumented' };
   }
 
