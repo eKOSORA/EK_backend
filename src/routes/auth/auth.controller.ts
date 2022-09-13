@@ -1,5 +1,6 @@
 import { SignupBody } from './signupBody.dto';
-import { DefaultResponse, ErrorResponse, SuccessResponse } from './auth.types';
+import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
+import { DefaultAuthResponse } from './auth.types';
 import { LoginBody } from './loginBody.dto';
 import { AuthService } from './auth.service';
 import {
@@ -35,7 +36,7 @@ export class AuthController {
     @Body() { accountType, emailorcode, password, school }: LoginBody,
     @Res() res: Response,
   ): Promise<Response> {
-    const result: DefaultResponse = await this.authService.login(
+    const result: DefaultAuthResponse = await this.authService.login(
       accountType,
       emailorcode,
       password,

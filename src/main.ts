@@ -31,6 +31,7 @@ async function bootstrap() {
     .addTag('parent', 'Parent related routes')
     .addTag('announcement', 'Announcement related routes')
     .addTag('settings', 'Settings related routes')
+    .addTag('default', 'unclassified')
     .build();
 
   const options: SwaggerDocumentOptions = {

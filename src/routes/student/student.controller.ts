@@ -19,7 +19,7 @@ import {
 } from '@nestjs/common';
 import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ErrorResponse, SuccessResponse } from '../auth/auth.types';
+import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
 
 @ApiTags('student')
 @ProtectedController('jwt', 'student')

@@ -2,7 +2,7 @@ import { Educator, EducatorDocument } from './../../schemas/educator.schema';
 import { Parent, ParentDocument } from './../../schemas/parent.schema';
 import { School, SchoolDocument } from './../../schemas/school.schema';
 import { SignupBody } from './signupBody.dto';
-import { DefaultResponse, LoginResponse } from './auth.types';
+import { DefaultResponse, LoginResponse } from '../../config/global.interface';
 import { Student, StudentDocument } from '../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
