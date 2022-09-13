@@ -1,4 +1,9 @@
-import { StudentBody, LessStudentBody, AddRecordBody } from './student.types';
+import {
+  StudentBody,
+  LessStudentBody,
+  AddRecordBody,
+  UpdateMarkBody,
+} from './student.types';
 import { deep_stringify } from './../../config/oneliners';
 import {
   Student,
@@ -97,6 +102,40 @@ export class StudentService {
         },
       );
       return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async updateMark(schoolId: string, recordInfo: UpdateMarkBody) {
+    try {
+      await this.studentModel.updateOne(
+        {
+          school: schoolId,
+          _id: recordInfo.studentId,
+          records: { $elemMatch: { _id: recordInfo.recordId } },
+        },
+        {
+          $set: { 'records.$.mark': recordInfo.mark },
+        },
+      );
+      return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async getRecords(schoolId: string, _year: string, _class: string) {
+    try {
+      const records = await this.studentModel
+        .find({
+          school: schoolId,
+          'class._class': _class,
+          'class._year': _year,
+        })
+        .lean()
+        .populate({ path: 'subject', select: 'title' });
+      return { code: '#Success', results: deep_stringify(records) };
     } catch (e) {
       return { code: '#Error', message: e.message };
     }

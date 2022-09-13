@@ -2,6 +2,8 @@ import {
   AddStudentBody,
   EditStudentBody,
   AddRecordBody,
+  UpdateMarkBody,
+  GetRecordsResponse,
 } from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
@@ -17,9 +19,12 @@ import {
   Delete,
   Body,
 } from '@nestjs/common';
-import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
+import {
+  DefaultApiResponses,
+  JWTToken,
+  ProtectedController,
+} from '../../custom/custom.decorators';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('student')
 @ProtectedController('jwt', 'student')
@@ -45,29 +50,17 @@ export class StudentController {
 
   @Post('/add')
   @UseGuards(OnlyAdminGuard)
-  @ApiOkResponse({
-    description: 'Successfully added students',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Failed to add students',
-    type: ErrorResponse,
-  })
+  @DefaultApiResponses(
+    'Successfully Added The Students',
+    'Failed to add the students',
+  )
   addStudents(@JWTToken() token: Jwt, @Body() body: AddStudentBody) {
     return this.studentService.addStudents(token.schoolId, body.students);
   }
 
   @Post('/edit')
-  @ApiOkResponse({
-    description: 'Successfully edited student info',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Something went wrong.',
-    type: ErrorResponse,
-  })
+  @UseGuards(OnlyAdminGuard)
+  @DefaultApiResponses()
   editStudents(@JWTToken() token: Jwt, @Body() body: EditStudentBody) {
     return this.studentService.editStudents(
       token.schoolId,
@@ -77,26 +70,27 @@ export class StudentController {
   }
 
   @Post('/addRecord')
-  @ApiOkResponse({
-    description: 'Successfully edited student info',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Something went wrong.',
-    type: ErrorResponse,
-  })
+  @UseGuards(OnlyAdminGuard)
+  @DefaultApiResponses()
   newRecord(@JWTToken() token: Jwt, @Body() body: AddRecordBody) {
     return this.studentService.newRecord(token.schoolId, body);
   }
 
   @Post('/updateMark')
-  updateMark() {
-    return { code: '#UnDocumented' };
+  @UseGuards(OnlyAdminGuard)
+  @DefaultApiResponses()
+  updateMark(@JWTToken() token: Jwt, @Body() body: UpdateMarkBody) {
+    return this.studentService.updateMark(token.schoolId, body);
   }
 
   @Post('/getRecords')
-  getRecords() {
+  @ApiOkResponse({ description: 'Successful', type: GetRecordsResponse })
+  getRecords(
+    @JWTToken() token: Jwt,
+    @Query('_class') _class: string,
+    @Query('_year') _year: string,
+  ) {
+    return this.studentService.getRecords(token.schoolId, _year, _class);
     return { code: '#UnDocumented' };
   }
 

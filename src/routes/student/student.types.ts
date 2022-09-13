@@ -1,5 +1,8 @@
+import { SafeStudent } from './../../schemas/student.schema';
+import { SuccessResponse } from './../../config/global.interface';
 import { Type } from 'class-transformer';
 import {
+  IsAlphanumeric,
   IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -101,4 +104,29 @@ export class AddRecordBody {
   @IsNotEmpty()
   @IsUUID()
   term: string | mongoose.Types.ObjectId;
+}
+
+export class UpdateMarkBody {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsUUID()
+  studentId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsUUID()
+  recordId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsAlphanumeric()
+  mark: number;
+
+  @ApiProperty()
+  remark?: string;
+}
+
+export class GetRecordsResponse extends SuccessResponse {
+  @ApiProperty()
+  results: SafeStudent[];
 }

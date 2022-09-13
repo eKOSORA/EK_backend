@@ -24,7 +24,7 @@ export class Record {
     type: mongoose.Schema.Types.ObjectId,
     default: new mongoose.Types.ObjectId(),
   })
-  id: mongoose.Schema.Types.ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: String })
   name: string;
@@ -88,15 +88,32 @@ export class SafeStudent implements StudentInterface {
   @Exclude()
   password: string;
 
+  @ApiProperty()
   _id?: string;
+
   foo?: string;
+
+  @ApiProperty()
   names: string;
+
   school: School;
+
+  @ApiProperty()
   code: string;
+
+  @ApiProperty()
   class: ClassObject;
+
+  @ApiProperty()
   records: Record[];
+
+  @ApiProperty()
   email: string;
+
+  @ApiProperty()
   parentEmails: string[];
+
+  @ApiProperty()
   profileLink: string;
 
   constructor(partial: Partial<SafeStudent>, ...without: string[]) {
