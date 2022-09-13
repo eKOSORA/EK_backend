@@ -82,6 +82,7 @@ export class AddRecordBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsUUID()
   subject: string;
 
   @ApiProperty()
@@ -98,5 +99,6 @@ export class AddRecordBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsUUID()
   term: string | mongoose.Types.ObjectId;
 }

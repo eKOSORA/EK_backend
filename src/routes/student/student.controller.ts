@@ -87,7 +87,7 @@ export class StudentController {
     type: ErrorResponse,
   })
   newRecord(@JWTToken() token: Jwt, @Body() body: AddRecordBody) {
-    return { code: '#UnDocumented' };
+    return this.studentService.newRecord(token.schoolId, body);
   }
 
   @Post('/updateMark')

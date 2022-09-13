@@ -15,6 +15,7 @@ export class StudentService {
     @InjectModel(Student.name)
     private readonly studentModel: Model<StudentDocument>,
   ) {}
+
   async getStudentsByClass(schoolId: string, year: number, _class: string) {
     const students = await this.studentModel
       .find({
