@@ -21,10 +21,4 @@ export class SettingsController {
   getTerms() {
     return { code: '#UnDocumented' };
   }
-
-  @Get('/test')
-  testFunc() {
-    this.settingsService.testFunc();
-    return { code: '#UnDocumented' };
-  }
 }

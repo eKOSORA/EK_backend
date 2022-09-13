@@ -2,7 +2,6 @@ import { SchoolTerm, SchoolTermDocument } from './../../schemas/term.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { _try } from '../../custom/try.func';
 
 @Injectable()
 export class SettingsService {
@@ -30,11 +29,5 @@ export class SettingsService {
       .lean()
       .populate('academicYear');
     return { code: '#Success', result: curTerm };
-  }
-
-  @_try()
-  testFunc() {
-    console.log('This is the test function');
-    throw 'Error';
   }
 }
