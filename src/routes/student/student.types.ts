@@ -127,6 +127,13 @@ export class UpdateMarkBody {
 }
 
 export class GetRecordsResponse extends SuccessResponse {
-  @ApiProperty()
+  @ApiProperty({ type: [SafeStudent] })
   results: SafeStudent[];
+}
+
+export class DeleteRecordBody {
+  @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  _id: string;
 }

@@ -140,4 +140,21 @@ export class StudentService {
       return { code: '#Error', message: e.message };
     }
   }
+
+  async deleteRecord(schoolId: string, recordId: string) {
+    try {
+      await this.studentModel.updateMany(
+        {
+          school: schoolId,
+          records: { $elemMatch: { _id: recordId } },
+        },
+        {
+          $pull: { records: { _id: recordId } },
+        },
+      );
+      return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
 }

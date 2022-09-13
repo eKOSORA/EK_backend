@@ -4,6 +4,7 @@ import {
   AddRecordBody,
   UpdateMarkBody,
   GetRecordsResponse,
+  DeleteRecordBody,
 } from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
@@ -84,6 +85,7 @@ export class StudentController {
   }
 
   @Post('/getRecords')
+  @UseGuards(OnlyAdminGuard)
   @ApiOkResponse({ description: 'Successful', type: GetRecordsResponse })
   getRecords(
     @JWTToken() token: Jwt,
@@ -91,12 +93,13 @@ export class StudentController {
     @Query('_year') _year: string,
   ) {
     return this.studentService.getRecords(token.schoolId, _year, _class);
-    return { code: '#UnDocumented' };
   }
 
   @Delete('/deleteRecord')
-  deleteRecord() {
-    return { code: '#UnDocumented' };
+  @UseGuards(OnlyAdminGuard)
+  @DefaultApiResponses('Successfully Deleted Record', 'Failed to delete record')
+  deleteRecord(@JWTToken() token: Jwt, @Body() body: DeleteRecordBody) {
+    return this.studentService.deleteRecord(token.schoolId, body._id);
   }
 
   @Post('/addParent')
