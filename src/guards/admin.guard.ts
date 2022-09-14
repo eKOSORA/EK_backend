@@ -12,3 +12,14 @@ export class OnlyAdminGuard implements CanActivate {
     return !!request.jwt?.isAdmin;
   }
 }
+
+@Injectable()
+export class OnlyEducatorGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request: any = context.switchToHttp().getRequest();
+    console.log(yellow(checkEmoji, '[EducatorGuard] '), 'Checking');
+    return request.jwt?.accountType === 'educator';
+  }
+}

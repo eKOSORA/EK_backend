@@ -33,3 +33,8 @@ export class SuccessResponse extends DefaultResponse {
   @ApiProperty({ default: '#Success' })
   code: string;
 }
+
+export class ResponseWithResults extends DefaultResponse {
+  @ApiProperty()
+  results?: object | object[] | string | string[];
+}

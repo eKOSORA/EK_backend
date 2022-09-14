@@ -15,6 +15,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Parent, ParentDocument } from '../../schemas/parent.schema';
+import { EducatorService } from '../educator/educator.service';
 
 @Injectable()
 export class StudentService {
@@ -24,6 +25,7 @@ export class StudentService {
     @InjectModel(Parent.name)
     private readonly parentModel: Model<ParentDocument>,
     private readonly parentService: ParentService,
+    private readonly educatorService: EducatorService,
   ) {}
 
   async getStudentsByClass(schoolId: string, year: number, _class: string) {
@@ -172,5 +174,21 @@ export class StudentService {
     }
 
     return this.parentService.newParent(schoolId, studentId, parent_email);
+  }
+
+  async getSummary(schoolId: string, educatorId: string) {
+    try {
+      const educator_subjects = await this.educatorService.getSubjects(
+        schoolId,
+        educatorId,
+      );
+      if (educator_subjects.code === '#Error') {
+        throw new Error(educator_subjects.message);
+      }
+
+      return { code: '#Success', results: [] };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
   }
 }

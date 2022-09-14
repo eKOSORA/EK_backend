@@ -1,3 +1,4 @@
+import { EducatorService } from './../educator/educator.service';
 import { ParentService } from './../parent/parent.service';
 import { Parent, ParentSchema } from '../../schemas/parent.schema';
 import { SendGridService } from './../sendgrid/sendgrid.service';
@@ -15,6 +16,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
   ],
   controllers: [StudentController],
-  providers: [StudentService, SendGridService, ParentService],
+  providers: [StudentService, SendGridService, ParentService, EducatorService],
 })
 export class StudentModule {}

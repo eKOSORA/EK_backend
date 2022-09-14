@@ -9,7 +9,7 @@ import {
 } from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
-import { OnlyAdminGuard } from './../../guards/admin.guard';
+import { OnlyAdminGuard, OnlyEducatorGuard } from './../../guards/admin.guard';
 import {
   ClassSerializerInterceptor,
   Get,
@@ -115,7 +115,9 @@ export class StudentController {
   }
 
   @Post('/getSummary')
-  getSummary() {
+  @UseGuards(OnlyEducatorGuard)
+  getSummary(@JWTToken() token: Jwt) {
+    this.studentService.getSummary(token.schoolId, token.id);
     return { code: '#UnDocumented' };
   }
 }
