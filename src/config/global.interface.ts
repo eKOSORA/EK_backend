@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface Jwt {
   accountType: string;
@@ -11,7 +11,7 @@ export class DefaultResponse {
   @ApiProperty()
   code: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   message?: string;
 }
 
@@ -24,6 +24,9 @@ export class LoginResponse extends DefaultResponse {
 export class ErrorResponse extends DefaultResponse {
   @ApiProperty({ default: '#Error' })
   code: string;
+
+  @ApiProperty()
+  message: string;
 }
 
 export class SuccessResponse extends DefaultResponse {

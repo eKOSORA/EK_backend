@@ -1,5 +1,3 @@
-import { ChangeMarkMailContent } from './../sendgrid/sendgrid.types';
-import { SendGridService } from './../sendgrid/sendgrid.service';
 import {
   AddStudentBody,
   EditStudentBody,
@@ -7,6 +5,7 @@ import {
   UpdateMarkBody,
   GetRecordsResponse,
   DeleteRecordBody,
+  AddParentBody,
 } from './student.types';
 import { StudentService } from './student.service';
 import { Jwt } from './../../config/global.interface';
@@ -32,10 +31,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('student')
 @ProtectedController('jwt', 'student')
 export class StudentController {
-  constructor(
-    private readonly studentService: StudentService,
-    private readonly sendGridService: SendGridService,
-  ) {}
+  constructor(private readonly studentService: StudentService) {}
   /**
    * Fetch all students in a specified class and year/grade in the school of the currently logged in user
    * @param token object that contains info about the request source
@@ -110,8 +106,12 @@ export class StudentController {
   @Post('/addParent')
   @UseGuards(OnlyAdminGuard)
   @DefaultApiResponses()
-  addParent() {
-    return { code: '#UnDocumented' };
+  addParent(@JWTToken() token: Jwt, @Body() body: AddParentBody) {
+    return this.studentService.addParent(
+      token.schoolId,
+      body.studentId,
+      body.parent_email,
+    );
   }
 
   @Post('/getSummary')

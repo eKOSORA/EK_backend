@@ -137,3 +137,13 @@ export class DeleteRecordBody {
   @IsNotEmpty()
   _id: string;
 }
+
+export class AddParentBody {
+  @ApiProperty()
+  @IsEmail()
+  parent_email: string;
+
+  @ApiProperty()
+  @IsUUID()
+  studentId: string;
+}

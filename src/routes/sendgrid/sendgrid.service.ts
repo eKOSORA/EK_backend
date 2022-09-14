@@ -9,6 +9,10 @@ export class SendGridService {
       name: 'change_marks',
       templateId: 'd-641cd9d8838f4289b30f0a34a51d8bab',
     },
+    {
+      name: 'register_parent',
+      templateId: 'd-37e0837edd554647b05eea0d40921c25',
+    },
   ];
   constructor() {
     SendGrid.setApiKey(process.env.SENDGRID_API_KEY);

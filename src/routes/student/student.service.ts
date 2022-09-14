@@ -1,3 +1,4 @@
+import { ParentService } from './../parent/parent.service';
 import {
   StudentBody,
   LessStudentBody,
@@ -13,12 +14,16 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
+import { Parent, ParentDocument } from '../../schemas/parent.schema';
 
 @Injectable()
 export class StudentService {
   constructor(
     @InjectModel(Student.name)
     private readonly studentModel: Model<StudentDocument>,
+    @InjectModel(Parent.name)
+    private readonly parentModel: Model<ParentDocument>,
+    private readonly parentService: ParentService,
   ) {}
 
   async getStudentsByClass(schoolId: string, year: number, _class: string) {
@@ -156,5 +161,16 @@ export class StudentService {
     } catch (e) {
       return { code: '#Error', message: e.message };
     }
+  }
+
+  async addParent(schoolId: string, studentId: string, parent_email: string) {
+    const parent = await this.parentModel.findOne({
+      email: parent_email,
+    });
+    if (!!parent) {
+      return this.parentService.addChild(schoolId, parent._id, studentId);
+    }
+
+    return this.parentService.newParent(schoolId, studentId, parent_email);
   }
 }

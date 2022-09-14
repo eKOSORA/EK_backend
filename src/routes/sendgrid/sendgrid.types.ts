@@ -4,7 +4,6 @@ export class Mail {
   subject: string;
   text?: string;
   html?: string;
-  date?: string;
   dynamicTemplateData?: object;
 }
 
@@ -18,6 +17,21 @@ export class ChangeMarkMailContent {
   date: string;
 }
 
+export class NewParentMailContent {
+  student_names: string;
+  code: string;
+  date: string;
+}
+
 export class ChangeMarkMail extends Mail {
   dynamicTemplateData: ChangeMarkMailContent;
+}
+
+export class NewParentMail extends Mail {
+  dynamicTemplateData: NewParentMailContent;
+}
+
+export class Template {
+  name: string;
+  templateId: string;
 }

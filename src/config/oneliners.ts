@@ -29,3 +29,5 @@ export const sys_notification = async (title = 'nestjs', message = '') => {
     console.log(red(errorEmoji, 'Failed to send notification'));
   }
 };
+
+export const arr_to_obj = (arr) => arr.reduce((p, c) => ({ ...p, [c]: c }), {});
