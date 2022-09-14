@@ -1,3 +1,4 @@
+import { SendGridService } from './../sendgrid/sendgrid.service';
 import { Student, studentSchema } from './../../schemas/student.schema';
 import { StudentService } from './student.service';
 import { StudentController } from './student.controller';
@@ -9,6 +10,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forFeature([{ name: Student.name, schema: studentSchema }]),
   ],
   controllers: [StudentController],
-  providers: [StudentService],
+  providers: [StudentService, SendGridService],
 })
 export class StudentModule {}
