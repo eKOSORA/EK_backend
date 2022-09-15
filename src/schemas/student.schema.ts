@@ -96,7 +96,7 @@ export class SafeStudent implements StudentInterface {
   @ApiProperty()
   names: string;
 
-  school: School;
+  school: School | mongoose.Types.ObjectId;
 
   @ApiProperty()
   code: string;
