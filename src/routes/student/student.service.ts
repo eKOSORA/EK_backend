@@ -17,6 +17,7 @@ import { Model, Types } from 'mongoose';
 import { Parent, ParentDocument } from '../../schemas/parent.schema';
 import { EducatorService } from '../educator/educator.service';
 import { Subject } from '../../schemas/subject.schema';
+import { ResponseWithResults } from 'src/config/global.interface';
 
 @Injectable()
 export class StudentService {
@@ -29,7 +30,11 @@ export class StudentService {
     private readonly educatorService: EducatorService,
   ) {}
 
-  async getStudentsByClass(schoolId: string, year: number, _class: string) {
+  async getStudentsByClass(
+    schoolId: string,
+    year: number,
+    _class: string,
+  ): Promise<ResponseWithResults> {
     const students = await this.studentModel
       .find({
         school: new Types.ObjectId(schoolId),
@@ -41,7 +46,10 @@ export class StudentService {
     const safeStudents: SafeStudent[] = students.map(
       (student) => new SafeStudent(student, 'records', 'password'),
     );
-    return deep_stringify(safeStudents);
+    return {
+      code: '#Success',
+      results: deep_stringify(safeStudents),
+    };
   }
 
   async addStudents(schoolId: string, students: StudentBody[]) {

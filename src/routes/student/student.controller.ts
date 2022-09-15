@@ -1,4 +1,8 @@
 import {
+  ErrorResponse,
+  ResponseWithResults,
+} from '../../config/global.interface';
+import {
   AddStudentBody,
   EditStudentBody,
   AddRecordBody,
@@ -26,7 +30,7 @@ import {
   JWTToken,
   ProtectedController,
 } from '../../custom/custom.decorators';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('student')
 @ProtectedController('jwt', 'student')
@@ -41,6 +45,15 @@ export class StudentController {
   @Get('/getAll')
   @UseGuards(OnlyAdminGuard)
   @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({
+    description: 'Successfully retrieved the students',
+    type: ResponseWithResults,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Something went wrong. Please try again.',
+    type: ErrorResponse,
+  })
   getStudentsByClass(
     @JWTToken() token: Jwt,
     @Query('year', ParseIntPipe) year: number,
