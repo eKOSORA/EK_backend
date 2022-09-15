@@ -16,6 +16,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Parent, ParentDocument } from '../../schemas/parent.schema';
 import { EducatorService } from '../educator/educator.service';
+import { Subject } from '../../schemas/subject.schema';
 
 @Injectable()
 export class StudentService {
@@ -185,6 +186,15 @@ export class StudentService {
       if (educator_subjects.code === '#Error') {
         throw new Error(educator_subjects.message);
       }
+
+      /* Filter for only the subjects taught at the current school */
+      const subjects: object[] = (
+        educator_subjects.results as Subject[]
+      ).filter((subject) =>
+        (subject.schools as Types.ObjectId[]).includes(
+          new Types.ObjectId(schoolId),
+        ),
+      );
 
       return { code: '#Success', results: [] };
     } catch (e) {

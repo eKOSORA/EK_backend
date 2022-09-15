@@ -1,3 +1,4 @@
+import { Educator, EducatorSchema } from './../../schemas/educator.schema';
 import { EducatorService } from './../educator/educator.service';
 import { ParentService } from './../parent/parent.service';
 import { Parent, ParentSchema } from '../../schemas/parent.schema';
@@ -13,6 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forFeature([
       { name: Student.name, schema: studentSchema },
       { name: Parent.name, schema: ParentSchema },
+      { name: Educator.name, schema: EducatorSchema },
     ]),
   ],
   controllers: [StudentController],
