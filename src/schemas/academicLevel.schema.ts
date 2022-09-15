@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { School } from './school.schema';
 import { Subject } from './subject.schema';
+
+export type AcademicLevelDocument = Document & AcademicLevel;
 
 @Schema()
 export class AcademicLevel {

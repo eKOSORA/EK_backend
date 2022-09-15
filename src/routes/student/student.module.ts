@@ -1,3 +1,7 @@
+import {
+  AcademicLevel,
+  AcademicLevelSchema,
+} from './../../schemas/academicLevel.schema';
 import { Educator, EducatorSchema } from './../../schemas/educator.schema';
 import { EducatorService } from './../educator/educator.service';
 import { ParentService } from './../parent/parent.service';
@@ -15,6 +19,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       { name: Student.name, schema: studentSchema },
       { name: Parent.name, schema: ParentSchema },
       { name: Educator.name, schema: EducatorSchema },
+      { name: AcademicLevel.name, schema: AcademicLevelSchema },
     ]),
   ],
   controllers: [StudentController],

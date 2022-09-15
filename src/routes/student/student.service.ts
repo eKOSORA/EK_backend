@@ -1,3 +1,7 @@
+import {
+  AcademicLevel,
+  AcademicLevelDocument,
+} from './../../schemas/academicLevel.schema';
 import { ParentService } from './../parent/parent.service';
 import {
   StudentBody,
@@ -5,7 +9,7 @@ import {
   AddRecordBody,
   UpdateMarkBody,
 } from './student.types';
-import { deep_stringify } from './../../config/oneliners';
+import { arr_to_obj, deep_stringify } from './../../config/oneliners';
 import {
   Student,
   StudentDocument,
@@ -26,6 +30,8 @@ export class StudentService {
     private readonly studentModel: Model<StudentDocument>,
     @InjectModel(Parent.name)
     private readonly parentModel: Model<ParentDocument>,
+    @InjectModel(AcademicLevel.name)
+    private readonly academicLevelModel: Model<AcademicLevelDocument>,
     private readonly parentService: ParentService,
     private readonly educatorService: EducatorService,
   ) {}
@@ -50,6 +56,14 @@ export class StudentService {
       code: '#Success',
       results: deep_stringify(safeStudents),
     };
+  }
+
+  async getStudentsByAny(schoolId: string, options: Partial<Student> | object) {
+    const students = await this.studentModel.find({
+      school: schoolId,
+      ...options,
+    });
+    return students;
   }
 
   async addStudents(schoolId: string, students: StudentBody[]) {
@@ -185,6 +199,14 @@ export class StudentService {
     return this.parentService.newParent(schoolId, studentId, parent_email);
   }
 
+  async getClassesBySubjects(schoolId: string, subjects: Subject[]) {
+    const levels = await this.academicLevelModel.find({
+      school: schoolId,
+      subjects: { $elemMatch: { $in: subjects } },
+    });
+    return levels;
+  }
+
   async getSummary(schoolId: string, educatorId: string) {
     try {
       const educator_subjects = await this.educatorService.getSubjects(
@@ -196,15 +218,32 @@ export class StudentService {
       }
 
       /* Filter for only the subjects taught at the current school */
-      const subjects: object[] = (
+      const subjects: Subject[] = (
         educator_subjects.results as Subject[]
       ).filter((subject) =>
         (subject.schools as Types.ObjectId[]).includes(
           new Types.ObjectId(schoolId),
         ),
       );
+      /* Check for the classes that have those lessons */
+      const levels = (await this.getClassesBySubjects(schoolId, subjects)).map(
+        (level) => level.year,
+      );
 
-      return { code: '#Success', results: [] };
+      const studentInfo: Student[] = await this.getStudentsByAny(schoolId, {
+        'class._year': { $in: levels },
+      });
+      const organizedStudents: object = arr_to_obj(levels, []);
+      studentInfo.map((student) => {
+        organizedStudents[student.class._year] = new SafeStudent(
+          student,
+          'password',
+          'email',
+          'parentEmails',
+          'profileLink',
+        );
+      });
+      return { code: '#Success', results: organizedStudents };
     } catch (e) {
       return { code: '#Error', message: e.message };
     }

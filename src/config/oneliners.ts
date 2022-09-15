@@ -30,4 +30,6 @@ export const sys_notification = async (title = 'nestjs', message = '') => {
   }
 };
 
-export const arr_to_obj = (arr) => arr.reduce((p, c) => ({ ...p, [c]: c }), {});
+export const arr_to_obj = (arr: Array<any>, fill?: any) => {
+  return arr.reduce((p, c) => ({ ...p, [c]: fill ?? c }), {});
+};
