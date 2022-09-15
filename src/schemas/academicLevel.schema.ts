@@ -6,13 +6,13 @@ import { Subject } from './subject.schema';
 @Schema()
 export class AcademicLevel {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
-  school: School;
+  school: mongoose.Types.ObjectId | School;
 
   @Prop()
   year: number;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }] })
-  subjects: Subject[];
+  subjects: mongoose.Types.ObjectId[] | Subject[];
 }
 
 export const AcademicLevelSchema = SchemaFactory.createForClass(AcademicLevel);

@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
+import mongoose from 'mongoose';
 import { School } from './school.schema';
 
 export type AcademicYearDocument = AcademicYear & Document;
@@ -13,7 +14,7 @@ export class AcademicYear {
   end: Date;
 
   @Prop({ type: mongooseSchema.Types.ObjectId, ref: 'School' })
-  school: School;
+  school: mongoose.Types.ObjectId | School;
 
   @Prop({ default: true })
   current: boolean;

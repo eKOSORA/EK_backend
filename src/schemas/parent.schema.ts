@@ -19,7 +19,7 @@ export class Parent {
   password: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }] })
-  children: Student[];
+  children: mongoose.Types.ObjectId[] | Student[];
 
   @Prop({ type: String })
   profileLink: string;

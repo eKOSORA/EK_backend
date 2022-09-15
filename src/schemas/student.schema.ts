@@ -30,7 +30,7 @@ export class Record {
   name: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' })
-  subject: Subject;
+  subject: mongoose.Types.ObjectId | Subject;
 
   @Prop({ type: Date })
   date: Date;
@@ -45,7 +45,7 @@ export class Record {
   reversed: boolean;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'SchoolTerm' })
-  term: SchoolTerm;
+  term: mongoose.Types.ObjectId | SchoolTerm;
 }
 
 @Schema()
@@ -54,7 +54,7 @@ export class Student {
   names: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
-  school: School;
+  school: mongoose.Types.ObjectId | School;
 
   @Prop({ type: String })
   code: string;

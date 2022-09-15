@@ -26,10 +26,10 @@ export class Educator {
   password: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
-  school: School;
+  school: mongoose.Types.ObjectId | School;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }] })
-  subjects: Subject[];
+  subjects: mongoose.Types.ObjectId[] | Subject[];
 
   @Prop({ type: String })
   profileLink: string;
