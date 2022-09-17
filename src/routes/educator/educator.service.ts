@@ -7,7 +7,7 @@ import { Subject, SubjectDocument } from './../../schemas/subject.schema';
 import { ResponseWithResults } from './../../config/global.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Educator, EducatorDocument } from '../../schemas/educator.schema';
 
 @Injectable()

@@ -30,7 +30,12 @@ import {
   JWTToken,
   ProtectedController,
 } from '../../custom/custom.decorators';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('student')
 @ProtectedController('jwt', 'student')
@@ -129,6 +134,19 @@ export class StudentController {
 
   @Get('/getSummary')
   @UseGuards(OnlyEducatorGuard)
+  @ApiOperation({
+    summary: 'Get a summary of all the lessons a certain teacher teaches',
+    description: 'This route is only accessible when logged in as an educator',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved summary',
+    type: ResponseWithResults,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Something went wrong',
+    type: ErrorResponse,
+  })
   getSummary(@JWTToken() token: Jwt) {
     return this.studentService.getSummary(token.schoolId, token.id);
   }
