@@ -13,7 +13,7 @@ export class Subject {
   code: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'School' }] })
-  schools: mongoose.Types.ObjectId[] | School[];
+  schools: mongoose.Types.ObjectId[] | School[] | string[];
 }
 
 export const SubjectSchema = SchemaFactory.createForClass(Subject);

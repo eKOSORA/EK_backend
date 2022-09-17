@@ -13,6 +13,9 @@ export class AcademicLevel {
   @Prop()
   year: number;
 
+  @Prop()
+  classes: string[];
+
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }] })
   subjects: mongoose.Types.ObjectId[] | Subject[];
 }

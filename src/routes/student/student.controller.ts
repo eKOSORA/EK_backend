@@ -127,10 +127,9 @@ export class StudentController {
     );
   }
 
-  @Post('/getSummary')
+  @Get('/getSummary')
   @UseGuards(OnlyEducatorGuard)
   getSummary(@JWTToken() token: Jwt) {
-    this.studentService.getSummary(token.schoolId, token.id);
-    return { code: '#UnDocumented' };
+    return this.studentService.getSummary(token.schoolId, token.id);
   }
 }

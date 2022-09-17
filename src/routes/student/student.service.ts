@@ -59,11 +59,13 @@ export class StudentService {
   }
 
   async getStudentsByAny(schoolId: string, options: Partial<Student> | object) {
-    const students = await this.studentModel.find({
-      school: schoolId,
-      ...options,
-    });
-    return students;
+    const students = await this.studentModel
+      .find({
+        school: schoolId,
+        ...options,
+      })
+      .lean();
+    return deep_stringify(students);
   }
 
   async addStudents(schoolId: string, students: StudentBody[]) {
@@ -200,11 +202,17 @@ export class StudentService {
   }
 
   async getClassesBySubjects(schoolId: string, subjects: Subject[]) {
-    const levels = await this.academicLevelModel.find({
-      school: schoolId,
-      subjects: { $elemMatch: { $in: subjects } },
-    });
-    return levels;
+    const subjectIds = subjects.map((subject: any) => subject._id);
+
+    const levels = await this.academicLevelModel
+      .find({
+        school: schoolId,
+        subjects: {
+          $elemMatch: { $in: subjectIds },
+        },
+      })
+      .lean();
+    return deep_stringify(levels);
   }
 
   async getSummary(schoolId: string, educatorId: string) {
@@ -220,30 +228,30 @@ export class StudentService {
       /* Filter for only the subjects taught at the current school */
       const subjects: Subject[] = (
         educator_subjects.results as Subject[]
-      ).filter((subject) =>
-        (subject.schools as Types.ObjectId[]).includes(
-          new Types.ObjectId(schoolId),
-        ),
-      );
+      )?.filter((subject) => (subject.schools as string[]).includes(schoolId));
       /* Check for the classes that have those lessons */
       const levels = (await this.getClassesBySubjects(schoolId, subjects)).map(
-        (level) => level.year,
+        (level) => [level.year, level.classes],
       );
 
       const studentInfo: Student[] = await this.getStudentsByAny(schoolId, {
-        'class._year': { $in: levels },
+        'class._year': { $in: levels.map((level) => level[0]) },
       });
       const organizedStudents: object = arr_to_obj(levels, []);
+
       studentInfo.map((student) => {
-        organizedStudents[student.class._year] = new SafeStudent(
-          student,
-          'password',
-          'email',
-          'parentEmails',
-          'profileLink',
+        organizedStudents[student.class._year][student.class._class].push(
+          new SafeStudent(
+            student,
+            'password',
+            'email',
+            'parentEmails',
+            'profileLink',
+          ),
         );
       });
-      return { code: '#Success', results: organizedStudents };
+
+      return { code: '#Success', results: deep_stringify(organizedStudents) };
     } catch (e) {
       return { code: '#Error', message: e.message };
     }

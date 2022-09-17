@@ -1,4 +1,5 @@
 import { exec } from 'child_process';
+import { isArray } from 'class-validator';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const chalk = require('chalk');
@@ -31,5 +32,12 @@ export const sys_notification = async (title = 'nestjs', message = '') => {
 };
 
 export const arr_to_obj = (arr: Array<any>, fill?: any) => {
-  return arr.reduce((p, c) => ({ ...p, [c]: fill ?? c }), {});
+  if (!arr.map) return {};
+  return arr.reduce((p, c) => {
+    const key = isArray(c) ? c[0] : c;
+    const val = isArray(c)
+      ? arr_to_obj(isArray(c[1]) ? c[1] : [c[1]], fill)
+      : fill ?? c;
+    return { ...p, [key]: val };
+  }, {});
 };
