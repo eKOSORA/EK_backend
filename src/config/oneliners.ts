@@ -41,3 +41,18 @@ export const arr_to_obj = (arr: Array<any>, fill?: any) => {
     return { ...p, [key]: val };
   }, {});
 };
+
+export const removePassword = (err, doc): Promise<any> => {
+  console.log('RUNNING REMOVE PASSWORD');
+  return new Promise((resolve, reject) => {
+    if (err) reject(err);
+    if (Array.isArray(doc)) {
+      doc.forEach((one, i) => {
+        doc[i].password = void 0;
+      });
+    } else {
+      doc.password = void 0;
+    }
+    resolve(doc);
+  });
+};
