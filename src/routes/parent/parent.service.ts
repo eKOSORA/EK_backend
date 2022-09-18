@@ -1,3 +1,10 @@
+import {
+  ResponseWithResults,
+  ErrorResponse,
+  SuccessResponse,
+} from './../../config/global.interface';
+import { deep_stringify } from './../../config/oneliners';
+import { SafeParent } from './../../schemas/parent.schema';
 import { SendGridService } from './../sendgrid/sendgrid.service';
 import { Parent, ParentDocument } from '../../schemas/parent.schema';
 import { Injectable } from '@nestjs/common';
@@ -5,6 +12,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { NewParentMailContent } from '../sendgrid/sendgrid.types';
 import { Student, StudentDocument } from '../../schemas/student.schema';
+import { RegisterParent } from './parent.types';
 
 @Injectable()
 export class ParentService {
@@ -16,7 +24,28 @@ export class ParentService {
     private readonly sendGridService: SendGridService,
   ) {}
 
-  async newParent(schoolId: string, studentId: string, parent_email: string) {
+  async getParentInfo(
+    parentId: string,
+  ): Promise<ResponseWithResults | ErrorResponse> {
+    try {
+      const parent = await this.parentModel
+        .findOne({ _id: parentId })
+        .lean()
+        .populate({ path: 'children', select: 'names code email' });
+
+      const safeParent = new SafeParent(parent);
+
+      return { code: '#Success', results: deep_stringify(safeParent) };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async newParent(
+    schoolId: string,
+    studentId: string,
+    parent_email: string,
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
       const student = await this.studentModel.findOne({
         _id: studentId,
@@ -52,7 +81,28 @@ export class ParentService {
     }
   }
 
-  async addChild(schoolId: string, parentId: string, studentId: string) {
+  async registerParent(
+    parentId: string,
+    updates: RegisterParent,
+  ): Promise<SuccessResponse | ErrorResponse> {
+    try {
+      const parent = await this.parentModel.findOneAndUpdate(
+        { _id: parentId },
+        { ...updates },
+      );
+      if (!parent) throw new Error('Parent Not Found');
+
+      return { code: '#Success' };
+    } catch (e) {
+      return { code: '#Error', message: e.message };
+    }
+  }
+
+  async addChild(
+    schoolId: string,
+    parentId: string,
+    studentId: string,
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
       const child = await this.studentModel.findOne({
         school: schoolId,

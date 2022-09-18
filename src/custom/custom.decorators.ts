@@ -28,7 +28,7 @@ export const ProtectedController = (ck: string, ctl: string) => {
 export const DefaultApiResponses = (ok?: string, error?: string) => {
   return applyDecorators(
     ApiOkResponse({
-      description: ok || 'Successfully edited student info',
+      description: ok || 'Successfully done task.',
       type: SuccessResponse,
     }),
     ApiResponse({

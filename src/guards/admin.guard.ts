@@ -23,3 +23,14 @@ export class OnlyEducatorGuard implements CanActivate {
     return request.jwt?.accountType === 'educator';
   }
 }
+
+@Injectable()
+export class NoStudentGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request: any = context.switchToHttp().getRequest();
+    console.log(yellow(checkEmoji, '[EducatorGuard] '), 'Checking');
+    return request.jwt?.accountType !== 'student';
+  }
+}

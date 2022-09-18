@@ -23,7 +23,7 @@ export class LoginResponse extends DefaultResponse {
 
 export class ErrorResponse extends DefaultResponse {
   @ApiProperty({ default: '#Error' })
-  code: string;
+  code: '#Error';
 
   @ApiProperty()
   message: string;
@@ -31,7 +31,7 @@ export class ErrorResponse extends DefaultResponse {
 
 export class SuccessResponse extends DefaultResponse {
   @ApiProperty({ default: '#Success' })
-  code: string;
+  code: '#Success';
 }
 
 export class ResponseWithResults extends DefaultResponse {
