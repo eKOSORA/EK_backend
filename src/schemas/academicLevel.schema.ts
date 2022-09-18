@@ -5,7 +5,7 @@ import { Subject } from './subject.schema';
 
 export type AcademicLevelDocument = Document & AcademicLevel;
 
-@Schema()
+@Schema({ strict: true })
 export class AcademicLevel {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
   school: mongoose.Types.ObjectId | School;

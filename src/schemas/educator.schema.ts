@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export type EducatorDocument = Educator & mongoose.Document;
 
-@Schema()
+@Schema({ strict: true })
 export class Educator {
   @Prop({ type: String })
   @ApiProperty()

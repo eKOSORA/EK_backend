@@ -23,7 +23,7 @@ export class SchoolAddress {
   village?: string;
 }
 
-@Schema()
+@Schema({ strict: true })
 export class School {
   /* =====> PART 1: BASIC INFO */
   @Prop({ type: String, required: true, unique: true })

@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 export type SubjectDocument = Subject & mongoose.Document;
 
-@Schema()
+@Schema({ strict: true })
 export class Subject {
   @Prop({ type: String, unique: true, lowercase: true, trim: true })
   title: string;

@@ -5,7 +5,7 @@ import { School } from './school.schema';
 
 export type AcademicYearDocument = AcademicYear & Document;
 
-@Schema()
+@Schema({ strict: true })
 export class AcademicYear {
   @Prop()
   start: Date;

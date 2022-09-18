@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 export type SchoolTermDocument = SchoolTerm & Document;
 
-@Schema()
+@Schema({ strict: true })
 export class SchoolTerm {
   @Prop()
   start: Date;

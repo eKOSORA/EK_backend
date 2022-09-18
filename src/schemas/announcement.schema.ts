@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 export type AnnouncementDocument = Announcement & mongoose.Document;
 
-@Schema()
+@Schema({ strict: true })
 export class Announcement {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Educator' })
   @ApiProperty({ type: String, description: 'Educator _id' })

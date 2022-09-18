@@ -48,7 +48,7 @@ export class Record {
   term: mongoose.Types.ObjectId | SchoolTerm;
 }
 
-@Schema()
+@Schema({ strict: true })
 export class Student {
   @Prop({ type: String })
   names: string;
@@ -78,7 +78,7 @@ export class Student {
   profileLink: string;
 }
 
-export const studentSchema = SchemaFactory.createForClass(Student);
+export const StudentSchema = SchemaFactory.createForClass(Student);
 
 interface StudentInterface extends Student {
   foo?: string;
