@@ -51,30 +51,39 @@ export class Record {
 @Schema({ strict: true })
 export class Student {
   @Prop({ type: String })
+  @ApiProperty()
   names: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
+  @ApiProperty()
   school: mongoose.Types.ObjectId | School;
 
   @Prop({ type: String })
+  @ApiProperty()
   code: string;
 
   @Prop()
+  @ApiProperty()
   class: ClassObject;
 
   @Prop({ default: [] })
+  @ApiProperty()
   records: Record[];
 
   @Prop({ type: String, default: process.env.DEFAULT_PASSWORD })
+  @ApiProperty()
   password: string;
 
   @Prop({ type: String, unique: true })
+  @ApiProperty()
   email: string;
 
   @Prop({ type: String, default: [] })
+  @ApiProperty()
   parentEmails: string[];
 
   @Prop({ type: String })
+  @ApiProperty()
   profileLink: string;
 }
 

@@ -4,13 +4,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ParentService } from './parent.service';
 import { ParentController } from './parent.controller';
 import { Module } from '@nestjs/common';
-import { Student, studentSchema } from '../../schemas/student.schema';
+import { Student, StudentSchema } from '../../schemas/student.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Parent.name, schema: ParentSchema },
-      { name: Student.name, schema: studentSchema },
+      { name: Student.name, schema: StudentSchema },
     ]),
   ],
   controllers: [ParentController],

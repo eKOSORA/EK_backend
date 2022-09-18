@@ -1,5 +1,5 @@
 import { SchoolTerm, SchoolTermSchema } from './../../schemas/term.schema';
-import { Student, studentSchema } from './../../schemas/student.schema';
+import { Student, StudentSchema } from './../../schemas/student.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
@@ -11,7 +11,7 @@ import { Parent, ParentSchema } from './../../schemas/parent.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Student.name, schema: studentSchema },
+      { name: Student.name, schema: StudentSchema },
       { name: Educator.name, schema: EducatorSchema },
       { name: Parent.name, schema: ParentSchema },
       { name: SchoolTerm.name, schema: SchoolTermSchema },

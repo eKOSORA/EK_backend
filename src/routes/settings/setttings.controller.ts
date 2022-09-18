@@ -1,24 +1,38 @@
+import { OnlyAdminGuard } from './../../guards/admin.guard';
+import { TermBody } from './settings.types';
+import { Jwt, SomeUserSchema } from './../../config/global.interface';
 import { SettingsService } from './settings.service';
-import { Post, Get } from '@nestjs/common';
+import { Post, Get, Body, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ProtectedController } from '../../custom/custom.decorators';
+import {
+  DefaultApiResponses,
+  JWTToken,
+  ProtectedController,
+} from '../../custom/custom.decorators';
 
 @ProtectedController('jwt', 'settings')
 @ApiTags('settings')
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
-  @Post('/updateProfile')
-  updateProfile() {
-    return { code: '#UnDocumented' };
+
+  @Post('/update')
+  @DefaultApiResponses('Successfully updated', 'Failed to update')
+  updateProfile(@JWTToken() token: Jwt, @Body() body: Partial<SomeUserSchema>) {
+    return this.settingsService.updateInfo(token.id, token.accountType, body);
   }
 
   @Post('/newTerm')
-  newTerm() {
-    return { code: '#UnDocumented' };
+  @UseGuards(OnlyAdminGuard)
+  @DefaultApiResponses(
+    'Successfully created new term',
+    'Failed to create new term',
+  )
+  newTerm(@JWTToken() token: Jwt, @Body() body: TermBody) {
+    return this.settingsService.createTerm(token.schoolId, body);
   }
 
   @Get('/terms')
-  getTerms() {
-    return { code: '#UnDocumented' };
+  getTerms(@JWTToken() token: Jwt) {
+    return this.settingsService.getRecentTerms(token.schoolId);
   }
 }

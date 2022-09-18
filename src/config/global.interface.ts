@@ -1,4 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  UpdatableStudent,
+  UpdatableEducator,
+  UpdatableParent,
+} from 'src/routes/settings/settings.types';
 
 export interface Jwt {
   accountType: AccountType;
@@ -40,3 +45,7 @@ export class ResponseWithResults extends DefaultResponse {
 }
 
 export type AccountType = 'student' | 'educator' | 'parent' | 'admin';
+export type SomeUserSchema =
+  | UpdatableStudent
+  | UpdatableEducator
+  | UpdatableParent;
