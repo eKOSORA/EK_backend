@@ -24,10 +24,12 @@ export class AddEducatorBody {
   subjects?: string;
 }
 
+export class UpdateEducator extends PartialType(Educator) {}
+
 export class EditEducatorBody {
   @ApiProperty()
   educatorId: string;
 
-  @ApiProperty({ type: PartialType<Educator> })
+  @ApiProperty({ type: UpdateEducator })
   updates: Partial<Educator>;
 }
