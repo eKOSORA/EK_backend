@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface Jwt {
-  accountType: string;
+  accountType: AccountType;
   id: string;
   isAdmin: boolean;
   schoolId?: string;
@@ -38,3 +38,5 @@ export class ResponseWithResults extends DefaultResponse {
   @ApiProperty()
   results?: object | object[] | string | string[];
 }
+
+export type AccountType = 'student' | 'educator' | 'parent' | 'admin';
