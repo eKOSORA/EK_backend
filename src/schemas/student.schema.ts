@@ -48,6 +48,11 @@ export class Record {
   term: mongoose.Types.ObjectId | SchoolTerm;
 }
 
+const parentLimitCheck = (val: Array<string>): boolean => {
+  console.log('VALIDATING :', val);
+  return val.length >= 2;
+};
+
 @Schema({ strict: true })
 export class Student {
   @Prop({ type: String })
@@ -78,7 +83,11 @@ export class Student {
   @ApiProperty()
   email: string;
 
-  @Prop({ type: String, default: [] })
+  @Prop({
+    type: [String],
+    default: [],
+    validate: [parentLimitCheck, 'Student Can Only Have 2 parents'],
+  })
   @ApiProperty()
   parentEmails: string[];
 
@@ -88,6 +97,14 @@ export class Student {
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
+
+StudentSchema.pre(
+  'update',
+  function (next: mongoose.CallbackWithoutResultAndOptionalError) {
+    console.log('THIS ', this);
+    next();
+  },
+);
 
 interface StudentInterface extends Student {
   foo?: string;

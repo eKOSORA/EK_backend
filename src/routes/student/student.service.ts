@@ -195,9 +195,11 @@ export class StudentService {
       email: parent_email,
     });
     if (!!parent) {
+      console.log('Adding child');
       return this.parentService.addChild(schoolId, parent._id, studentId);
     }
 
+    console.log('Adding parent');
     return this.parentService.newParent(schoolId, studentId, parent_email);
   }
 
@@ -222,7 +224,7 @@ export class StudentService {
         educatorId,
       );
       if (educator_subjects.code === '#Error') {
-        throw new Error(educator_subjects.message);
+        throw new Error(educator_subjects.message as string);
       }
 
       /* Filter for only the subjects taught at the current school */

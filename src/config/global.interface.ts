@@ -17,7 +17,7 @@ export class DefaultResponse {
   code: string;
 
   @ApiPropertyOptional()
-  message?: string;
+  message?: string | string[];
 }
 
 export class LoginResponse extends DefaultResponse {

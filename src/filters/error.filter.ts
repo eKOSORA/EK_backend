@@ -1,3 +1,4 @@
+import { yellow, checkEmoji } from './../config/oneliners';
 import {
   ArgumentsHost,
   Catch,
@@ -13,6 +14,7 @@ export interface CustomResponse extends Response {
 @Catch(HttpException)
 export class HttpErrorFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+    console.log(yellow(checkEmoji, 'INTERCEPTING...'));
     const context = host.switchToHttp();
     const response = context.getResponse<CustomResponse>();
     const exceptionResponse: any = exception.getResponse();
@@ -20,7 +22,7 @@ export class HttpErrorFilter implements ExceptionFilter {
 
     response.status(status).json({
       code: exceptionResponse.code || '#Error',
-      message: exceptionResponse.message,
+      message: exceptionResponse.message || exceptionResponse,
     });
   }
 }

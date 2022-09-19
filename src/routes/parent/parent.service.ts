@@ -55,6 +55,11 @@ export class ParentService {
         throw new Error('Invalid Student ID. Student Does Not Exist');
       }
 
+      await this.studentModel.updateOne(
+        { _id: studentId },
+        { $push: { parentEmails: parent_email } },
+      );
+
       const parent = new this.parentModel({
         email: parent_email,
         children: [studentId],

@@ -1,5 +1,11 @@
 import { yellow, checkEmoji } from './../config/oneliners';
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -9,6 +15,11 @@ export class OnlyAdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: any = context.switchToHttp().getRequest();
     console.log(yellow(checkEmoji, '[AdminGuard] '), 'Checking');
+    if (!request.jwt?.isAdmin)
+      throw new HttpException(
+        'Only admins can access this route',
+        HttpStatus.UNAUTHORIZED,
+      );
     return !!request.jwt?.isAdmin;
   }
 }
