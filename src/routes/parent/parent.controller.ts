@@ -1,6 +1,7 @@
 import {
   ResponseWithResults,
   ErrorResponse,
+  NoTokenResponse,
 } from './../../config/global.interface';
 import { GetParentInfoBody, RegisterParentBody } from './parent.types';
 import { NoStudentGuard } from './../../guards/admin.guard';
@@ -14,6 +15,12 @@ import {
 
 @ProtectedController('jwt', 'parent')
 @ApiTags('parent')
+@ApiResponse({ status: 403, description: 'Forbidden' })
+@ApiResponse({
+  status: 401,
+  description: 'UnAuthorized',
+  type: NoTokenResponse,
+})
 export class ParentController {
   constructor(private readonly parentService: ParentService) {}
 

@@ -1,5 +1,9 @@
 import { SignupBody } from './signupBody.dto';
-import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
+import {
+  ErrorResponse,
+  SuccessResponse,
+  NoTokenResponse,
+} from '../../config/global.interface';
 import { DefaultAuthResponse } from './auth.types';
 import { LoginBody } from './loginBody.dto';
 import { AuthService } from './auth.service';
@@ -16,6 +20,12 @@ import { Response } from 'express';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
+@ApiResponse({ status: 403, description: 'Forbidden' })
+@ApiResponse({
+  status: 401,
+  description: 'UnAuthorized',
+  type: NoTokenResponse,
+})
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

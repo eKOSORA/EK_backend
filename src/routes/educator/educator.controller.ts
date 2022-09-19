@@ -2,6 +2,7 @@ import {
   Jwt,
   ResponseWithResults,
   ErrorResponse,
+  NoTokenResponse,
 } from './../../config/global.interface';
 import { EducatorService } from './educator.service';
 import { OnlyAdminGuard } from './../../guards/admin.guard';
@@ -16,6 +17,12 @@ import { AddEducatorBody, EditEducatorBody } from './educator.types';
 
 @ProtectedController('jwt', 'educator')
 @ApiTags('educator')
+@ApiResponse({ status: 403, description: 'Forbidden' })
+@ApiResponse({
+  status: 401,
+  description: 'UnAuthorized',
+  type: NoTokenResponse,
+})
 export class EducatorController {
   constructor(private readonly educatorService: EducatorService) {}
 

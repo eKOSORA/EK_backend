@@ -39,6 +39,11 @@ export class SuccessResponse extends DefaultResponse {
   code: '#Success';
 }
 
+export class NoTokenResponse extends DefaultResponse {
+  @ApiProperty({ default: '#NoToken' })
+  code: '#NoToken';
+}
+
 export class ResponseWithResults extends DefaultResponse {
   @ApiProperty()
   results?: object | object[] | string | string[];

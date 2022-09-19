@@ -5,6 +5,7 @@ import {
   ResponseWithResults,
   ErrorResponse,
   SuccessResponse,
+  NoTokenResponse,
 } from './../../config/global.interface';
 import { AnnouncementService } from './announcement.service';
 import { Body, Get, Post, UseGuards } from '@nestjs/common';
@@ -13,6 +14,12 @@ import { JWTToken, ProtectedController } from '../../custom/custom.decorators';
 
 @ProtectedController('jwt', 'announcement')
 @ApiTags('announcement')
+@ApiResponse({ status: 403, description: 'Forbidden' })
+@ApiResponse({
+  status: 401,
+  description: 'UnAuthorized',
+  type: NoTokenResponse,
+})
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 

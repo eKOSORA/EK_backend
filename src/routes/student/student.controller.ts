@@ -1,6 +1,7 @@
 import {
   ErrorResponse,
   ResponseWithResults,
+  NoTokenResponse,
 } from '../../config/global.interface';
 import {
   AddStudentBody,
@@ -38,6 +39,12 @@ import {
 } from '@nestjs/swagger';
 
 @ApiTags('student')
+@ApiResponse({ status: 403, description: 'Forbidden' })
+@ApiResponse({
+  status: 401,
+  description: 'UnAuthorized',
+  type: NoTokenResponse,
+})
 @ProtectedController('jwt', 'student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
