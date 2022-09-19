@@ -20,12 +20,6 @@ import { Response } from 'express';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
-@ApiResponse({ status: 403, description: 'Forbidden' })
-@ApiResponse({
-  status: 401,
-  description: 'UnAuthorized',
-  type: NoTokenResponse,
-})
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
