@@ -98,14 +98,6 @@ export class Student {
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
 
-StudentSchema.pre(
-  'update',
-  function (next: mongoose.CallbackWithoutResultAndOptionalError) {
-    console.log('THIS ', this);
-    next();
-  },
-);
-
 interface StudentInterface extends Student {
   foo?: string;
 }
