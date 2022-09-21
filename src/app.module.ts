@@ -15,23 +15,6 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { StudentModule } from './routes/student/student.module';
-import {
-  AcademicYear,
-  AcademicYearSchema,
-} from './schemas/academicYear.schema';
-import { Educator, EducatorSchema } from './schemas/educator.schema';
-import { Parent, ParentSchema } from './schemas/parent.schema';
-import { Student, StudentSchema } from './schemas/student.schema';
-import { SchoolTerm, SchoolTermSchema } from './schemas/term.schema';
-import {
-  AcademicLevel,
-  AcademicLevelSchema,
-} from './schemas/academicLevel.schema';
-import {
-  Announcement,
-  AnnouncementSchema,
-} from './schemas/announcement.schema';
-import { Subject, SubjectSchema } from './schemas/subject.schema';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const chalk = require('chalk');
@@ -47,17 +30,6 @@ const chalk = require('chalk');
     ParentModule,
     AnnouncementModule,
     SettingsModule,
-    MongooseModule.forFeature([
-      { name: SchoolTerm.name, schema: SchoolTermSchema },
-      { name: AcademicYear.name, schema: AcademicYearSchema },
-      { name: Student.name, schema: StudentSchema },
-      { name: Educator.name, schema: EducatorSchema },
-      { name: Parent.name, schema: ParentSchema },
-      { name: AcademicYear.name, schema: AcademicYearSchema },
-      { name: AcademicLevel.name, schema: AcademicLevelSchema },
-      { name: Announcement.name, schema: AnnouncementSchema },
-      { name: Subject.name, schema: SubjectSchema },
-    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
