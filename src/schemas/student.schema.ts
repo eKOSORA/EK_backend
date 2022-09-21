@@ -48,9 +48,10 @@ export class Record {
   term: mongoose.Types.ObjectId | SchoolTerm;
 }
 
-const parentLimitCheck = (val: Array<string>): boolean => {
-  console.log('VALIDATING :', val);
-  return val.length >= 2;
+export const parentLimitCheck = function (_this, next): void {
+  console.log('VALIDATING :', _this);
+  throw new Error('Shit went down');
+  // return this.length >= 2;
 };
 
 @Schema({ strict: true })
@@ -86,7 +87,10 @@ export class Student {
   @Prop({
     type: [String],
     default: [],
-    validate: [parentLimitCheck, 'Student Can Only Have 2 parents'],
+    validate: {
+      validator: parentLimitCheck,
+      message: 'Student Can Only Have 2 parents',
+    },
   })
   @ApiProperty()
   parentEmails: string[];

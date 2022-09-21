@@ -82,12 +82,13 @@ export class StudentService {
     }
   }
 
-  async editStudents(
+  async editStudent(
     schoolId: string,
     studentId: string,
     updates: LessStudentBody,
   ) {
     try {
+      updates.parentEmails = updates.parentEmails?.slice(0, 2);
       const found = !!(await this.studentModel.findOneAndUpdate(
         {
           school: schoolId,
@@ -191,12 +192,21 @@ export class StudentService {
   }
 
   async addParent(schoolId: string, studentId: string, parent_email: string) {
+    const student = await this.studentModel.findOne({ _id: studentId });
+    if (student.parentEmails.length == 2)
+      return { code: '#Error', message: 'Only 2 parents allowed' };
+
     const parent = await this.parentModel.findOne({
       email: parent_email,
     });
     if (!!parent) {
       console.log('Adding child');
-      return this.parentService.addChild(schoolId, parent._id, studentId);
+      return this.parentService.addChild(
+        schoolId,
+        parent._id,
+        studentId,
+        parent_email,
+      );
     }
 
     console.log('Adding parent');

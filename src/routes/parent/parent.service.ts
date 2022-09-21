@@ -51,9 +51,11 @@ export class ParentService {
         _id: studentId,
         school: schoolId,
       });
-      if (!student) {
+
+      if (!student)
         throw new Error('Invalid Student ID. Student Does Not Exist');
-      }
+      if (student.parentEmails.length == 2)
+        return { code: '#Error', message: 'Only 2 parents allowed' };
 
       await this.studentModel.updateOne(
         { _id: studentId },
@@ -107,6 +109,7 @@ export class ParentService {
     schoolId: string,
     parentId: string,
     studentId: string,
+    parent_email: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       const child = await this.studentModel.findOne({
@@ -116,11 +119,20 @@ export class ParentService {
       if (!child) {
         throw new Error('Invalid Student ID. Student Does Not Exist');
       }
+      const student = await this.studentModel.findOne({ _id: studentId });
+      if (student.parentEmails.length == 2)
+        return { code: '#Error', message: 'Only 2 parents allowed' };
+
+      await this.studentModel.updateOne(
+        { _id: child._id },
+        { $push: { parentEmails: parent_email } },
+      );
 
       const parent = await this.parentModel.updateOne(
         { _id: parentId },
         { $push: { children: studentId } },
       );
+
       if (!parent.matchedCount) {
         throw new Error('Invalid Parent ID. Parent Does Not Exist');
       }

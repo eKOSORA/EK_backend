@@ -89,7 +89,7 @@ export class StudentController {
   @UseGuards(OnlyAdminGuard)
   @DefaultApiResponses()
   editStudents(@JWTToken() token: Jwt, @Body() body: EditStudentBody) {
-    return this.studentService.editStudents(
+    return this.studentService.editStudent(
       token.schoolId,
       body.studentId,
       body.updates,
