@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Educator, EducatorDocument } from '../../schemas/educator.schema';
 import { AddEducatorBody } from './educator.types';
+import { ErrorChecker } from '../../custom/custom.decorators';
 
 @Injectable()
 export class EducatorService {
@@ -24,67 +25,54 @@ export class EducatorService {
     // this.temporal();
   }
 
+  @ErrorChecker()
   async getSubjects(
     schoolId: string,
     educatorId: string,
   ): Promise<ResponseWithResults> {
-    try {
-      const educator = await this.educatorModel
-        .findOne({
-          _id: educatorId,
-          school: schoolId,
-        })
-        .lean()
-        .populate('subjects');
+    const educator = await this.educatorModel
+      .findOne({
+        _id: educatorId,
+        school: schoolId,
+      })
+      .lean()
+      .populate('subjects');
 
-      if (!educator) {
-        throw new Error('Invalid EducatorID. No Such Educator in The System');
-      }
-
-      return { code: '#Success', results: deep_stringify(educator.subjects) };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
+    if (!educator) {
+      throw new Error('Invalid EducatorID. No Such Educator in The System');
     }
+
+    return { code: '#Success', results: deep_stringify(educator.subjects) };
   }
 
+  @ErrorChecker()
   async addEducator(schoolId: string, educatorInfo: AddEducatorBody) {
-    try {
-      const educator = new this.educatorModel({
-        ...educatorInfo,
-        password: process.env.DEFAULT_PASSWORD,
-      });
-      await educator.save();
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    const educator = new this.educatorModel({
+      ...educatorInfo,
+      password: process.env.DEFAULT_PASSWORD,
+    });
+    await educator.save();
+    return { code: '#Success' };
   }
 
+  @ErrorChecker()
   async getAllEducators(schoolId: string) {
-    try {
-      // TODO: Add the exec to remove password
-      const educators = this.educatorModel.find({ school: schoolId }).lean();
-
-      return { code: '#Success', results: deep_stringify(educators) };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    // TODO: Add the exec to remove password
+    const educators = this.educatorModel.find({ school: schoolId }).lean();
+    return { code: '#Success', results: deep_stringify(educators) };
   }
 
+  @ErrorChecker()
   async editEducator(
     schoolId: string,
     educatorId: string,
     updates: Partial<Educator>,
   ) {
-    try {
-      await this.educatorModel.updateOne(
-        { school: schoolId, _id: educatorId },
-        { ...updates },
-      );
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    await this.educatorModel.updateOne(
+      { school: schoolId, _id: educatorId },
+      { ...updates },
+    );
+    return { code: '#Success' };
   }
 
   // async temporal() {

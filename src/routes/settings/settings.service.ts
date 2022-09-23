@@ -16,6 +16,7 @@ import { SchoolTerm, SchoolTermDocument } from './../../schemas/term.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
+import { ErrorChecker } from '../../custom/custom.decorators';
 
 @Injectable()
 export class SettingsService {
@@ -59,53 +60,44 @@ export class SettingsService {
     return { code: '#Success', result: curTerm };
   }
 
+  @ErrorChecker()
   async createTerm(schoolId: string, data: TermBody) {
-    try {
-      const term = new this.schoolTermModel({ ...data, school: schoolId });
-      await term.save();
+    const term = new this.schoolTermModel({ ...data, school: schoolId });
+    await term.save();
 
-      await this.schoolTermModel.updateMany(
-        { school: schoolId },
-        { current: false },
-      );
+    await this.schoolTermModel.updateMany(
+      { school: schoolId },
+      { current: false },
+    );
 
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    return { code: '#Success' };
   }
 
+  @ErrorChecker()
   async createAcademicYear(schoolId: string, data: AcademicYearBody) {
-    try {
-      const term = new this.academicYearModel({ ...data, school: schoolId });
-      await term.save();
+    const term = new this.academicYearModel({ ...data, school: schoolId });
+    await term.save();
 
-      await this.academicYearModel.updateMany(
-        { school: schoolId },
-        { current: false },
-      );
+    await this.academicYearModel.updateMany(
+      { school: schoolId },
+      { current: false },
+    );
 
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    return { code: '#Success' };
   }
 
+  @ErrorChecker()
   async updateInfo(
     _id: string,
     accountType: AccountType,
     updates: Partial<SomeUserSchema>,
   ): Promise<SuccessResponse | ErrorResponse> {
-    try {
-      const update = await this.modelMap
-        .get(accountType)
-        ?.updateOne({ _id }, { ...updates });
+    const update = await this.modelMap
+      .get(accountType)
+      ?.updateOne({ _id }, { ...updates });
 
-      if (!update) throw new Error('Failed to update user info');
+    if (!update) throw new Error('Failed to update user info');
 
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    return { code: '#Success' };
   }
 }

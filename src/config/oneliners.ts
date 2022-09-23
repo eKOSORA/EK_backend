@@ -1,3 +1,4 @@
+import { ErrorResponse } from './global.interface';
 import { exec } from 'child_process';
 import { isArray } from 'class-validator';
 
@@ -56,3 +57,8 @@ export const removePassword = (err, doc): Promise<any> => {
     resolve(doc);
   });
 };
+
+export const errorResponseFor = (message: string): ErrorResponse => ({
+  code: '#Error',
+  message: message || 'Something went wrong. Please try again.',
+});

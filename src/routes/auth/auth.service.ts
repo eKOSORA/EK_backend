@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
+import { ErrorChecker } from '../../custom/custom.decorators';
 
 @Injectable()
 export class AuthService {
@@ -22,14 +23,11 @@ export class AuthService {
     private readonly educatorModel: Model<EducatorDocument>,
   ) {}
 
+  @ErrorChecker()
   async signupSchool(body: SignupBody): Promise<DefaultResponse> {
-    try {
-      const school = new this.schoolModel(body);
-      await school.save();
-      return { code: '#Success' };
-    } catch (e: any) {
-      return { code: '#Error', message: e.message };
-    }
+    const school = new this.schoolModel(body);
+    await school.save();
+    return { code: '#Success' };
   }
 
   async login(

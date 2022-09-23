@@ -12,6 +12,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { ErrorChecker } from '../../custom/custom.decorators';
 
 @Injectable()
 export class AnnouncementService {
@@ -22,42 +23,36 @@ export class AnnouncementService {
     // this.temporal();
   }
 
+  @ErrorChecker()
   async getAllAnnouncements(
     schoolId: string,
     accountType: AccountType,
     relevant = true,
   ): Promise<ResponseWithResults | ErrorResponse> {
-    try {
-      const allAnnouncements = await this.announcementModel
-        .find({
-          school: schoolId,
-          meantFor: accountType === 'admin' ? void 0 : accountType,
-        })
-        .lean();
+    const allAnnouncements = await this.announcementModel
+      .find({
+        school: schoolId,
+        meantFor: accountType === 'admin' ? void 0 : accountType,
+      })
+      .lean();
 
-      return { code: '#Success', results: allAnnouncements };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    return { code: '#Success', results: allAnnouncements };
   }
 
+  @ErrorChecker()
   async createAnnouncement(
     schoolId: string,
     educatorId: string,
     data: AnnouncementBody,
   ): Promise<SuccessResponse | ErrorResponse> {
-    try {
-      const announcement = new this.announcementModel({
-        composer: educatorId,
-        school: schoolId,
-        ...data,
-      });
+    const announcement = new this.announcementModel({
+      composer: educatorId,
+      school: schoolId,
+      ...data,
+    });
 
-      await announcement.save();
+    await announcement.save();
 
-      return { code: '#Success' };
-    } catch (e) {
-      return { code: '#Error', message: e.message };
-    }
+    return { code: '#Success' };
   }
 }
