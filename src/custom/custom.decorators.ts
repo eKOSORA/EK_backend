@@ -1,8 +1,11 @@
+import { red } from './../config/oneliners';
 import {
   applyDecorators,
   createParamDecorator,
   ExecutionContext,
   Controller,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOkResponse, ApiResponse } from '@nestjs/swagger';
 import { SuccessResponse, ErrorResponse } from '../config/global.interface';
@@ -37,4 +40,25 @@ export const DefaultApiResponses = (ok?: string, error?: string) => {
       type: ErrorResponse,
     }),
   );
+};
+
+export const ErrorChecker = () => {
+  return function (
+    target,
+    propertyKey: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    const fn = descriptor.value;
+    descriptor.value = (...args) => {
+      console.log('DECORATOR CALLED');
+      let _exec = (() => ({ code: '#ERROR', message: 'shit went down' }))();
+      try {
+        _exec = fn(...args);
+        return _exec;
+      } catch (e) {
+        console.log(red(`[ ErrorChecker ] ${e.message}`));
+        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+      }
+    };
+  };
 };
