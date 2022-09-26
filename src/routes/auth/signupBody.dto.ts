@@ -23,7 +23,7 @@ export class SignupBody {
   @Type(() => SchoolAddress)
   @IsNotEmpty()
   @IsNotEmptyObject()
-  @ApiProperty()
+  @ApiProperty({ type: SchoolAddress })
   address: SchoolAddress;
 
   @IsString()
@@ -36,7 +36,9 @@ export class SignupBody {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({
+    enum: ['government', 'government-aided', 'private'],
+  })
   status: string;
 
   @IsString()
