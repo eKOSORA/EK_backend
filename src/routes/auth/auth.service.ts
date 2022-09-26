@@ -25,6 +25,8 @@ export class AuthService {
 
   @ErrorChecker()
   async signupSchool(body: SignupBody): Promise<DefaultResponse> {
+    console.log(this);
+    return { code: '#TEST' };
     const school = new this.schoolModel(body);
     await school.save();
     return { code: '#Success' };
@@ -140,5 +142,11 @@ export class AuthService {
       );
       console.log('done with ', student.names);
     }
+  }
+
+  @ErrorChecker()
+  async testdec() {
+    console.log(this);
+    return { code: '#Error' };
   }
 }

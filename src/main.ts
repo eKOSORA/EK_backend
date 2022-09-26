@@ -43,7 +43,6 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT, () => {
     console.log(chalk.green(infoEmoji, 'Really up'));
-    console.log(isProd());
     if (!isProd()) {
       sys_notification('nestjs', 'Server is UP');
     }

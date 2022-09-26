@@ -78,4 +78,9 @@ export class AuthController {
       .status(200)
       .json({ code: '#Success', message: 'Successfully logged out' });
   }
+
+  @Get('/testdec')
+  testdec() {
+    return this.authService.testdec();
+  }
 }

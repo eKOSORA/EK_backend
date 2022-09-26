@@ -1,4 +1,4 @@
-import { red } from './../config/oneliners';
+import { red, yellow } from './../config/oneliners';
 import {
   applyDecorators,
   createParamDecorator,
@@ -49,14 +49,17 @@ export const ErrorChecker = () => {
     descriptor: PropertyDescriptor,
   ) {
     const fn = descriptor.value;
-    descriptor.value = (...args) => {
-      console.log('DECORATOR CALLED');
-      let _exec = (() => ({ code: '#ERROR', message: 'shit went down' }))();
+
+    descriptor.value = function (...args) {
+      console.log(yellow('[ ErrorChecker ] Checking...'));
+      let _exec = (function () {
+        return { code: '#ERROR', message: 'shit went down' };
+      })();
       try {
-        _exec = fn(...args);
+        _exec = fn.call(this, ...args);
         return _exec;
       } catch (e) {
-        console.log(red(`[ ErrorChecker ] ${e.message}`));
+        console.log(red(`  [ ErrorChecker ] ${e.message}`));
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }
     };
