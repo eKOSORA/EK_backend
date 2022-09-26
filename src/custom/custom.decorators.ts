@@ -1,4 +1,4 @@
-import { red, yellow } from './../config/oneliners';
+import { red, yellow, errorResponseFor } from './../config/oneliners';
 import {
   applyDecorators,
   createParamDecorator,
@@ -50,16 +50,20 @@ export const ErrorChecker = () => {
   ) {
     const fn = descriptor.value;
 
-    descriptor.value = function (...args) {
+    descriptor.value = async function (...args) {
       console.log(yellow('[ ErrorChecker ] Checking...'));
-      let _exec = (function () {
+      let _exec: any = (function () {
         return { code: '#ERROR', message: 'shit went down' };
       })();
+
       try {
         _exec = fn.call(this, ...args);
+
+        if (_exec instanceof Promise<Error>) throw await _exec;
+
         return _exec;
       } catch (e) {
-        console.log(red(`  [ ErrorChecker ] ${e.message}`));
+        console.log(red(`[ ErrorChecker ] ${e.message}`));
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }
     };
