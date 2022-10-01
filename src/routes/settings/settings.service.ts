@@ -17,6 +17,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { ErrorChecker } from '../../custom/custom.decorators';
+import { v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class SettingsService {
@@ -90,7 +91,7 @@ export class SettingsService {
   async updateInfo(
     _id: string,
     accountType: AccountType,
-    updates: Partial<SomeUserSchema>,
+    updates: Partial<Omit<SomeUserSchema, 'profileLink'>>,
   ): Promise<SuccessResponse | ErrorResponse> {
     const update = await this.modelMap
       .get(accountType)
@@ -98,6 +99,19 @@ export class SettingsService {
 
     if (!update) throw new Error('Failed to update user info');
 
+    return { code: '#Success' };
+  }
+
+  @ErrorChecker()
+  async updateProfile(
+    file: any,
+    profileId: string,
+    accountType: AccountType,
+  ): Promise<SuccessResponse | ErrorResponse> {
+    const res = await cloudinary.uploader.upload(file, { folder: 'ek' });
+    await this.modelMap
+      .get(accountType)
+      .updateOne({ _id: profileId }, { profileLink: res.secure_url });
     return { code: '#Success' };
   }
 }

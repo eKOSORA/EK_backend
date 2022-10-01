@@ -8,13 +8,21 @@ import {
   NoTokenResponse,
 } from './../../config/global.interface';
 import { SettingsService } from './settings.service';
-import { Post, Get, Body, UseGuards } from '@nestjs/common';
+import {
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   DefaultApiResponses,
   JWTToken,
   ProtectedController,
 } from '../../custom/custom.decorators';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ProtectedController('jwt', 'settings')
 @ApiTags('settings')
@@ -29,7 +37,7 @@ export class SettingsController {
 
   @Post('/update')
   @DefaultApiResponses('Successfully updated', 'Failed to update')
-  updateProfile(@JWTToken() token: Jwt, @Body() body: Partial<SomeUserSchema>) {
+  update(@JWTToken() token: Jwt, @Body() body: Partial<SomeUserSchema>) {
     return this.settingsService.updateInfo(token.id, token.accountType, body);
   }
 
@@ -52,5 +60,15 @@ export class SettingsController {
   })
   getTerms(@JWTToken() token: Jwt) {
     return this.settingsService.getRecentTerms(token.schoolId);
+  }
+
+  @Post('/updateProfile')
+  @DefaultApiResponses(
+    'Successfully updated profile',
+    'Failed to update profile',
+  )
+  @UseInterceptors(FileInterceptor('file'))
+  updateProfile(@UploadedFile('file') file) {
+    return { code: '#Success', message: 'Shit and Stuff' };
   }
 }
