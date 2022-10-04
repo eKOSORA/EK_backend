@@ -26,7 +26,7 @@ export class SchoolAddress {
 
 @Schema({ strict: true })
 export class School {
-  /* =====> PART 1: BASIC INFO */
+  // =====> PART 1: BASIC INFO
   @ApiProperty()
   @Prop({ type: String, required: true, unique: true })
   name: string;
@@ -61,13 +61,13 @@ export class School {
   })
   programme: string[];
 
-  /* =====> PART 2: WHEREABOUTS */
+  // =====> PART 2: WHEREABOUTS
 
   @ApiProperty()
   @Prop({ type: SchoolAddress, required: true })
   address: SchoolAddress;
 
-  /* =====> PART 3: MORE ABOUT THE SCHOOL */
+  // =====> PART 3: MORE ABOUT THE SCHOOL
 
   @ApiProperty()
   @Prop({ type: String })
