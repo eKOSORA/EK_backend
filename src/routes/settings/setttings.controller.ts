@@ -16,7 +16,13 @@ import {
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   DefaultApiResponses,
   JWTToken,
@@ -67,8 +73,21 @@ export class SettingsController {
     'Successfully updated profile',
     'Failed to update profile',
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
-  updateProfile(@UploadedFile('file') file) {
+  updateProfile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
     return { code: '#Success', message: 'Shit and Stuff' };
   }
 }
