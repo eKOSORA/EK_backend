@@ -3,12 +3,16 @@ import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNotEmptyObject,
+  IsObject,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { SchoolAddress } from './../../schemas/school.schema';
 
 export class SignupBody {
+  constructor(...params) {
+    console.log('CALLED', params);
+  }
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
@@ -22,6 +26,7 @@ export class SignupBody {
   @ValidateNested()
   @Type(() => SchoolAddress)
   @IsNotEmpty()
+  @IsObject()
   @IsNotEmptyObject()
   @ApiProperty({ type: SchoolAddress })
   address: SchoolAddress;
@@ -43,6 +48,11 @@ export class SignupBody {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({
+    enum: ['REB', 'WDA', 'Cambridge', 'Other'],
+  })
   programme: string;
+
+  @ApiProperty({ type: 'file' })
+  profile: Express.Multer.File;
 }

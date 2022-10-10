@@ -6,14 +6,17 @@ import { isArray } from 'class-validator';
 export const chalk = require('chalk');
 
 export const red = (...params: any[]) => {
-  return !!params.length ? '\u001b[31m' : chalk.red(...params);
+  return !params.length ? '\u001b[31m' : chalk.red(...params);
 };
 export const green = (...params: any[]) => {
-  return !!params.length ? '\u001b[31m' : chalk.green(...params);
+  return !params.length ? '\u001b[31m' : chalk.green(...params);
 };
 export const yellow = (...params: any[]) => {
-  return !!params.length ? '\u001b[31m' : chalk.yellow(...params);
+  return !params.length ? '\u001b[31m' : chalk.yellow(...params);
 };
+
+export const clear = () => '\u001b[0m';
+
 export const checkEmoji = '🔄';
 export const infoEmoji = '❕';
 export const errorEmoji = '❌';

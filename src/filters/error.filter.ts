@@ -15,6 +15,7 @@ export interface CustomResponse extends Response {
 export class HttpErrorFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     console.log(yellow(checkEmoji, 'INTERCEPTING...'));
+    console.log(exception);
     const context = host.switchToHttp();
     const response = context.getResponse<CustomResponse>();
     const exceptionResponse: any = exception.getResponse();
