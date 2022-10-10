@@ -1,3 +1,4 @@
+import { CloudinaryService } from './../cloudinary/cloudinary.service';
 import {
   AcademicYear,
   AcademicYearDocument,
@@ -17,7 +18,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { ErrorChecker } from '../../custom/custom.decorators';
-import { v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class SettingsService {
@@ -34,6 +34,7 @@ export class SettingsService {
     private readonly parentModel: Model<ParentDocument>,
     @InjectModel(AcademicYear.name)
     private readonly academicYearModel: Model<AcademicYearDocument>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {
     this.modelMap.set('student', this.studentModel);
     this.modelMap.set('educator', this.educatorModel);
@@ -108,7 +109,7 @@ export class SettingsService {
     profileId: string,
     accountType: AccountType,
   ): Promise<SuccessResponse | ErrorResponse> {
-    const res = await cloudinary.uploader.upload(file, { folder: 'ek' });
+    const res = await this.cloudinaryService.uploadFile(file, { folder: 'ek' });
     await this.modelMap
       .get(accountType)
       .updateOne({ _id: profileId }, { profileLink: res.secure_url });

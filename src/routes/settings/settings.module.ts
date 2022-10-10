@@ -1,3 +1,4 @@
+import { CloudinaryService } from './../cloudinary/cloudinary.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -21,6 +22,6 @@ import { SettingsController } from './setttings.controller';
     ]),
   ],
   controllers: [SettingsController],
-  providers: [SettingsService],
+  providers: [SettingsService, CloudinaryService],
 })
 export class SettingsModule {}
