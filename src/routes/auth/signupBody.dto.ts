@@ -39,7 +39,7 @@ export class SignupBody {
   @ApiProperty({
     enum: ['government', 'government-aided', 'private'],
   })
-  status: string;
+  type: string;
 
   @IsString()
   @IsNotEmpty()
