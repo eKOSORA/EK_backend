@@ -12,6 +12,7 @@ export class CloudinaryService {
   constructor() {
     console.log(green('[ CloudinaryService ] Up and Running!'));
   }
+
   @ErrorChecker()
   async uploadFile(
     file: string,
