@@ -41,7 +41,18 @@ export class NoStudentGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: any = context.switchToHttp().getRequest();
-    console.log(yellow(checkEmoji, '[EducatorGuard] '), 'Checking');
+    console.log(yellow(checkEmoji, '[NoStudentGuard] '), 'Checking');
     return request.jwt?.accountType !== 'student';
+  }
+}
+
+@Injectable()
+export class OnlyParentGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request: any = context.switchToHttp().getRequest();
+    console.log(yellow(checkEmoji, '[OnlyParentGuard] '), 'Checking');
+    return request.jwt?.accountType === 'parent';
   }
 }

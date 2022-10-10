@@ -59,11 +59,16 @@ export const ErrorChecker = () => {
       try {
         _exec = fn.call(this, ...args);
 
-        if (_exec instanceof Promise<Error>) throw await _exec;
+        if ((await _exec) instanceof Error) {
+          console.log(
+            red('[ErrorChecker] is Promise<Error>', _exec.constructor.name),
+          );
+          throw await _exec;
+        }
 
         return _exec;
       } catch (e) {
-        console.log(red(`[ ErrorChecker ] ${e.message}`));
+        console.log(red(`[ ErrorChecker ] ${e.message}`), e.message ? '' : e);
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }
     };

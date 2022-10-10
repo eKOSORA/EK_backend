@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { Exclude } from 'class-transformer';
 import { Subject } from './subject.schema';
 import { ApiProperty } from '@nestjs/swagger';
+import { Parent } from './parent.schema';
 
 export type StudentDocument = Student & mongoose.Document;
 
@@ -85,6 +86,18 @@ export class Student {
   email: string;
 
   @Prop({
+    type: [mongoose.Schema.Types.ObjectId],
+    default: [],
+    validate: {
+      validator: parentLimitCheck,
+      message: 'Student Can Only Have 2 parents',
+    },
+    ref: 'Parent',
+  })
+  @ApiProperty({ type: mongoose.Schema.Types.ObjectId })
+  parents: mongoose.Types.ObjectId | Parent;
+
+  @Prop({
     type: [String],
     default: [],
     validate: {
@@ -131,6 +144,9 @@ export class SafeStudent implements StudentInterface {
 
   @ApiProperty()
   email: string;
+
+  @ApiProperty()
+  parents: Parent | mongoose.Types.ObjectId;
 
   @ApiProperty()
   parentEmails: string[];

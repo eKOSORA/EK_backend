@@ -21,8 +21,12 @@ export class HttpErrorFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     response.status(status).json({
-      code: exceptionResponse.code || '#Error',
-      message: exceptionResponse.message || exceptionResponse,
+      code:
+        (exceptionResponse ? exceptionResponse.code : undefined) || '#Error',
+      message:
+        (exceptionResponse ? exceptionResponse.message : undefined) ||
+        exceptionResponse ||
+        'Something went wrong. Please try again.',
     });
   }
 }

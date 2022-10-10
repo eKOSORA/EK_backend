@@ -2,14 +2,16 @@ import {
   ResponseWithResults,
   ErrorResponse,
   NoTokenResponse,
+  Jwt,
 } from './../../config/global.interface';
 import { GetParentInfoBody, RegisterParentBody } from './parent.types';
-import { NoStudentGuard } from './../../guards/admin.guard';
+import { NoStudentGuard, OnlyParentGuard } from './../../guards/admin.guard';
 import { ParentService } from './parent.service';
-import { Body, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   DefaultApiResponses,
+  JWTToken,
   ProtectedController,
 } from '../../custom/custom.decorators';
 
@@ -50,13 +52,18 @@ export class ParentController {
     return this.parentService.registerParent(parentId, updates);
   }
 
-  // @Post('/add')
-  // addParent() {
-  //   return { code: '#UnDocumented' };
-  // }
-
-  // @Post('/addChild')
-  // addChild() {
-  //   return { code: '#UnDocumented' };
-  // }
+  @Get('/getChildrenInfo')
+  @ApiOkResponse({
+    type: ResponseWithResults,
+    description: 'Got Children Info i.e Records, ...',
+  })
+  @ApiResponse({
+    status: 400,
+    type: ErrorResponse,
+    description: 'Something went wrong. Please try again',
+  })
+  @UseGuards(OnlyParentGuard)
+  getChildrenInfo(@JWTToken() token: Jwt) {
+    return this.parentService.getChildrenInfo(token.id);
+  }
 }

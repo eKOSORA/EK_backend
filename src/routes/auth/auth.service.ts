@@ -1,3 +1,4 @@
+import { deep_stringify } from './../../config/oneliners';
 import { Educator, EducatorDocument } from './../../schemas/educator.schema';
 import { Parent, ParentDocument } from './../../schemas/parent.schema';
 import { School, SchoolDocument } from './../../schemas/school.schema';
@@ -144,8 +145,26 @@ export class AuthService {
 
   @ErrorChecker()
   async testdec() {
-    console.log(!!this);
-    throw new Error('this should be shown');
-    return { code: '#Error' };
+    // await this.studentModel.updateMany({}, { $unset: { parentEmails: 1 } });
+    // return { code: '#Success' };
+    // const studentWithParents = await this.studentModel
+    //   .find({
+    //     $nor: [{ parentEmails: [] }],
+    //   })
+    //   .lean();
+    // for (const student of studentWithParents) {
+    //   const studentParents = student.parentEmails;
+    //   const parentIds = deep_stringify(
+    //     await this.parentModel
+    //       .find({ email: { $in: studentParents } })
+    //       .select('_id'),
+    //   ).map((parent) => parent._id);
+    //   await this.studentModel.updateOne(
+    //     { _id: student._id },
+    //     { parents: parentIds },
+    //   );
+    // }
+    // console.log('[LOG] Got students');
+    return { code: '#Success' };
   }
 }

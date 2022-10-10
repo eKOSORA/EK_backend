@@ -132,4 +132,12 @@ export class ParentService {
       code: '#Success',
     };
   }
+
+  @ErrorChecker()
+  async getChildrenInfo(
+    parentId: string,
+  ): Promise<ResponseWithResults | ErrorResponse> {
+    // await this.studentModel
+    return { code: '#Success', results: [] };
+  }
 }
