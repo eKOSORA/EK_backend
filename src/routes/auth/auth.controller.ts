@@ -71,8 +71,8 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('profile'))
   async signup(@Body() body: SignupBody) {
     console.log(body);
-    return { code: '#Success' };
     const result = await this.authService.signupSchool(body);
+    return { code: '#Success' };
     return result;
   }
 

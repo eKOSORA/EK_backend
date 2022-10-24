@@ -1,3 +1,4 @@
+import { Educator } from './../../schemas/educator.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -46,13 +47,16 @@ export class SignupBody {
   })
   type: string;
 
-  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     enum: ['REB', 'WDA', 'Cambridge', 'Other'],
   })
-  programme: string;
+  programme: string | string[];
 
   @ApiProperty({ type: 'file' })
   profile: Express.Multer.File;
+
+  @ApiProperty({ type: Educator })
+  @IsNotEmpty()
+  admin: Educator;
 }
