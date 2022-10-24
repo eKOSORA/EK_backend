@@ -70,8 +70,12 @@ export class School {
   // =====> PART 3: MORE ABOUT THE SCHOOL
 
   @ApiProperty()
-  @Prop({ type: String })
-  head?: string;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Educator',
+    required: false,
+  })
+  head?: string | mongoose.Types.ObjectId;
 
   @ApiProperty()
   @Prop({ type: String })
