@@ -1,3 +1,4 @@
+import { ResponseWithResults } from './../../config/global.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SignupBody } from './signupBody.dto';
 import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
@@ -88,8 +89,17 @@ export class AuthController {
       .json({ code: '#Success', message: 'Successfully logged out' });
   }
 
-  @Get('/testdec')
-  testdec() {
-    return this.authService.testdec();
+  @Get('/schoolcodes')
+  @DefaultApiResponses('Got the schools', 'Failed to fetch school codes')
+  @ApiOkResponse({
+    type: ResponseWithResults,
+  })
+  getSchoolCodes() {
+    return this.authService.getSchoolCodes();
   }
+
+  // @Get('/testdec')
+  // testdec() {
+  //   return this.authService.testdec();
+  // }
 }

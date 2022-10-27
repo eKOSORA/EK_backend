@@ -1,3 +1,7 @@
+import {
+  ResponseWithResults,
+  ErrorResponse,
+} from './../../config/global.interface';
 import { deep_stringify } from './../../config/oneliners';
 import { Educator, EducatorDocument } from './../../schemas/educator.schema';
 import { Parent, ParentDocument } from './../../schemas/parent.schema';
@@ -145,6 +149,18 @@ export class AuthService {
       );
       console.log('done with ', student.names);
     }
+  }
+
+  @ErrorChecker()
+  async getSchoolCodes(): Promise<ResponseWithResults | ErrorResponse> {
+    const result = await this.schoolModel
+      .find({})
+      .select('_id name initials')
+      .lean();
+    return {
+      code: '#Success',
+      results: deep_stringify(result),
+    };
   }
 
   @ErrorChecker()
