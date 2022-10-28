@@ -32,7 +32,7 @@ export class AuthService {
   async signupSchool(body: SignupBody): Promise<DefaultResponse> {
     const school = new this.schoolModel({ ...body, head: null });
     await school.save();
-    const head = new this.educatorModel(body.admin);
+    const head = new this.educatorModel({ ...body.admin, school: school._id });
     await head.save();
 
     await this.schoolModel.updateOne({ _id: school._id }, { head: head._id });
