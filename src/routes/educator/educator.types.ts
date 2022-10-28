@@ -21,7 +21,7 @@ export class AddEducatorBody {
   school: string;
 
   @ApiPropertyOptional()
-  subjects?: string;
+  subjects?: string[];
 }
 
 export class UpdateEducator extends PartialType(Educator) {}
