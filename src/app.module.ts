@@ -36,7 +36,7 @@ const chalk = require('chalk');
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(CookieCheckMW).exclude('auth(.*)').forRoutes('*');
+    consumer.apply(CookieCheckMW).exclude('auth(.*)').forRoutes('*');
     consumer.apply(RemoveCookiesMW).forRoutes('auth/(.*)');
   }
   constructor() {

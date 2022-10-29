@@ -16,7 +16,11 @@ import { ApiProperty } from '@nestjs/swagger';
 export class StudentBody {
   @IsNotEmpty()
   @ApiProperty()
-  names: string;
+  firstName: string;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  lastName: string;
 
   @IsNotEmpty()
   @IsUUID()

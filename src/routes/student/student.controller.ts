@@ -72,7 +72,6 @@ export class StudentController {
     @Query('class') _class: string,
   ) {
     return this.studentService.getStudentsByClass(token.schoolId, year, _class);
-    return { code: '#Success' };
   }
 
   @Post('/add')

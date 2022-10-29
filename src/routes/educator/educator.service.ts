@@ -58,7 +58,11 @@ export class EducatorService {
   @ErrorChecker()
   async getAllEducators(schoolId: string) {
     // TODO: Add the exec to remove password
-    const educators = this.educatorModel.find({ school: schoolId }).lean();
+    const educators = await this.educatorModel
+      .find({ school: schoolId })
+      .lean()
+      .select('_id names code title email tel profileLink subjects school');
+    console.log(educators);
     return { code: '#Success', results: deep_stringify(educators) };
   }
 
