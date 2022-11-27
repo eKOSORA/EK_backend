@@ -1,5 +1,4 @@
 import { ResponseWithResults } from './../../config/global.interface';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { SignupBody } from './signupBody.dto';
 import { ErrorResponse, SuccessResponse } from '../../config/global.interface';
 import { DefaultAuthResponse } from './auth.types';
@@ -11,17 +10,11 @@ import {
   Get,
   Post,
   Res,
-  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
-import {
-  ApiConsumes,
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultApiResponses } from '../../custom/custom.decorators';
 
 @ApiTags('auth')
@@ -67,9 +60,9 @@ export class AuthController {
 
   @Post('/signup')
   @UsePipes(ValidationPipe)
-  @ApiConsumes('multipart/form-data')
   @DefaultApiResponses('Successfully Registered School')
-  @UseInterceptors(FileInterceptor('profile'))
+  // @ApiConsumes('multipart/form-data')
+  // @UseInterceptors(FileInterceptor('profile'))
   async signup(@Body() body: SignupBody) {
     console.log(body);
     const result = await this.authService.signupSchool(body);
