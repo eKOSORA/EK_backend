@@ -66,6 +66,9 @@ export class AuthService {
       default:
         response = { code: '#Error' };
     }
+    if (response.code !== '#Success') {
+      return { code: '#Error', message: response.message };
+    }
     /* Add token */
     response.token = jwt.sign(
       {
@@ -118,11 +121,15 @@ export class AuthService {
       school: schoolId,
       $or: [{ email: emailorphone }, { tel: emailorphone }],
     });
-    if (!user)
+    if (!user) {
+      console.log('[ERROR] no such user');
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+    }
 
-    if (user.password !== password)
+    if (user.password !== password) {
+      console.log('[ERROR] mismatch in password');
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+    }
     const titles = Array.isArray(user.title) ? user.title : [user.title];
     return {
       code: '#Success',

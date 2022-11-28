@@ -10,7 +10,7 @@ import {
 @Injectable()
 export class CloudinaryService {
   constructor() {
-    console.log(green('[ CloudinaryService ] Up and Running!'));
+    console.log(green('[ CloudinaryService ] Ready!'));
   }
 
   @ErrorChecker()

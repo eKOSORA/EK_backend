@@ -44,6 +44,8 @@ export class AuthController {
       password,
       school,
     );
+    console.log({ accountType, emailorcode, password, school });
+    console.log(result);
     if (result.code !== '#Success')
       return res.status(400).json({
         ...result,
@@ -92,6 +94,6 @@ export class AuthController {
 
   // @Get('/testdec')
   // testdec() {
-  //   return this.authService.testdec();
+  //   return { code: '#SuccessfulTest' };
   // }
 }
