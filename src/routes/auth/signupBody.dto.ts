@@ -11,9 +11,6 @@ import {
 import { SchoolAddress } from './../../schemas/school.schema';
 
 export class SignupBody {
-  constructor(...params) {
-    console.log('CALLED', params);
-  }
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

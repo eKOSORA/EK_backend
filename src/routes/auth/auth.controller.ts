@@ -58,15 +58,14 @@ export class AuthController {
       .json({ ...result, token: undefined, id: undefined, isAdmin: undefined });
   }
 
+  // @ApiConsumes('multipart/form-data')
+  // @UseInterceptors(FileInterceptor('profile'))
   @Post('/signup')
   @UsePipes(ValidationPipe)
   @DefaultApiResponses('Successfully Registered School')
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('profile'))
   async signup(@Body() body: SignupBody) {
     console.log(body);
     const result = await this.authService.signupSchool(body);
-    return { code: '#Success' };
     return result;
   }
 

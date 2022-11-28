@@ -1,4 +1,4 @@
-import { red, yellow, errorResponseFor } from './../config/oneliners';
+import { red, yellow, green } from './../config/oneliners';
 import {
   applyDecorators,
   createParamDecorator,
@@ -65,7 +65,7 @@ export const ErrorChecker = () => {
           );
           throw await _exec;
         }
-
+        console.log(green('[ ErrorChecker ] No Errors'));
         return _exec;
       } catch (e) {
         console.log(red(`[ ErrorChecker ] ${e.message}`), e.message ? '' : e);
