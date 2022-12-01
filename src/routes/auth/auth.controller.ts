@@ -49,13 +49,10 @@ export class AuthController {
         ...result,
         token: undefined,
         id: undefined,
-        isAdmin: undefined,
       });
 
     res.cookie('jwt', result.token, { maxAge: 2 * 60 * 60 * 1000 });
-    return res
-      .status(200)
-      .json({ ...result, token: undefined, id: undefined, isAdmin: undefined });
+    return res.status(200).json({ ...result, token: undefined, id: undefined });
   }
 
   // @ApiConsumes('multipart/form-data')

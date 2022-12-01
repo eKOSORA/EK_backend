@@ -91,15 +91,13 @@ export class AuthService {
     if (!user)
       return {
         code: '#Error',
-        message:
-          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+        message: 'Invalid Credentials',
       };
 
     if (user.password !== password)
       return {
         code: '#Error',
-        message:
-          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+        message: 'Invalid Credentials',
       };
 
     return { code: '#Success', id: user._id };
@@ -133,16 +131,14 @@ export class AuthService {
     if (!user) {
       return {
         code: '#Error',
-        message:
-          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+        message: 'Invalid Credentials',
       };
     }
 
     if (user.password !== password) {
       return {
         code: '#Error',
-        message:
-          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+        message: 'Invalid Credentials',
       };
     }
     const titles = Array.isArray(user.title) ? user.title : [user.title];
