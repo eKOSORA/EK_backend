@@ -11,7 +11,7 @@ import { DefaultResponse, LoginResponse } from '../../config/global.interface';
 import { Student, StudentDocument } from '../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types as mongoTypes } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import { ErrorChecker } from '../../custom/custom.decorators';
 
@@ -118,12 +118,17 @@ export class AuthService {
     schoolId: string,
   ): Promise<LoginResponse> {
     const user = await this.educatorModel.findOne({
-      school: schoolId,
+      school: new mongoTypes.ObjectId(schoolId),
       $or: [{ email: emailorphone }, { tel: emailorphone }],
     });
+    console.log(user);
     if (!user) {
       console.log('[ERROR] no such user');
-      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+      return {
+        code: '#Error',
+        message:
+          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+      };
     }
 
     if (user.password !== password) {
