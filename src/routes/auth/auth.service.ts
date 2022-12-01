@@ -88,10 +88,19 @@ export class AuthService {
     schoolId: string,
   ): Promise<LoginResponse> {
     const user = await this.studentModel.findOne({ code, school: schoolId });
-    if (!user) return { code: '#Error', message: 'Invalid Code Or Password' };
+    if (!user)
+      return {
+        code: '#Error',
+        message:
+          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+      };
 
     if (user.password !== password)
-      return { code: '#Error', message: 'Invalid Code Or Password' };
+      return {
+        code: '#Error',
+        message:
+          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+      };
 
     return { code: '#Success', id: user._id };
   }
@@ -121,9 +130,7 @@ export class AuthService {
       school: new mongoTypes.ObjectId(schoolId),
       $or: [{ email: emailorphone }, { tel: emailorphone }],
     });
-    console.log(user);
     if (!user) {
-      console.log('[ERROR] no such user');
       return {
         code: '#Error',
         message:
@@ -132,8 +139,11 @@ export class AuthService {
     }
 
     if (user.password !== password) {
-      console.log('[ERROR] mismatch in password');
-      return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
+      return {
+        code: '#Error',
+        message:
+          'Invalid credentials, make sure that you choose the correct school and use your credentials',
+      };
     }
     const titles = Array.isArray(user.title) ? user.title : [user.title];
     return {

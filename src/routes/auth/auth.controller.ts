@@ -44,8 +44,6 @@ export class AuthController {
       password,
       school,
     );
-    console.log({ accountType, emailorcode, password, school });
-    console.log(result);
     if (result.code !== '#Success')
       return res.status(400).json({
         ...result,
@@ -66,7 +64,6 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   @DefaultApiResponses('Successfully Registered School')
   async signup(@Body() body: SignupBody) {
-    console.log(body);
     const result = await this.authService.signupSchool(body);
     return result;
   }
