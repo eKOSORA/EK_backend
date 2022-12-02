@@ -1,3 +1,4 @@
+import { SafeUser } from './auth.types';
 import {
   ResponseWithResults,
   ErrorResponse,
@@ -100,7 +101,11 @@ export class AuthService {
         message: 'Invalid Credentials',
       };
 
-    return { code: '#Success', id: user._id };
+    return {
+      code: '#Success',
+      id: user._id,
+      user: new SafeUser<Student>(user),
+    };
   }
 
   async loginParent(
@@ -116,7 +121,7 @@ export class AuthService {
     if (user.password !== password)
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
 
-    return { code: '#Success', id: user._id };
+    return { code: '#Success', id: user._id, user: new SafeUser<Parent>(user) };
   }
 
   async loginEducator(
@@ -145,6 +150,7 @@ export class AuthService {
     return {
       code: '#Success',
       id: user._id,
+      user: new SafeUser<Educator>(user),
       isAdmin: titles.includes('admin'),
     };
   }
