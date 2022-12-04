@@ -18,6 +18,15 @@ async function bootstrap() {
     cors: true,
     logger: ['error', 'warn'],
   });
+  app.enableCors({
+    origin: [
+      'http://localhost',
+      'http://localhost:3000',
+      'https://ekosora.vercel.app',
+      'http://ekosora.vercel.app',
+    ],
+    credentials: true,
+  });
   app.useGlobalFilters(new HttpErrorFilter());
   app.use(cookieParser());
 

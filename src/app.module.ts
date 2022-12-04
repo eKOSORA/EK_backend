@@ -1,3 +1,4 @@
+import { CorsMW } from './middleware/cors.middleware';
 import { ParentModule } from './routes/parent/parent.module';
 import { SettingsModule } from './routes/settings/settings.module';
 import { AnnouncementModule } from './routes/announcement/announcement.module';
@@ -36,6 +37,7 @@ const chalk = require('chalk');
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorsMW).forRoutes('*');
     consumer.apply(CookieCheckMW).exclude('auth(.*)').forRoutes('*');
     consumer.apply(RemoveCookiesMW).forRoutes('auth/(.*)');
   }

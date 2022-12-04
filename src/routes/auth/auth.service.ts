@@ -104,7 +104,7 @@ export class AuthService {
     return {
       code: '#Success',
       id: user._id,
-      user: new SafeUser<Student>(user),
+      user: new SafeUser<Student>(deep_stringify(user)),
     };
   }
 
@@ -121,7 +121,11 @@ export class AuthService {
     if (user.password !== password)
       return { code: '#Error', message: 'Invalid Email / Tel Or Password' };
 
-    return { code: '#Success', id: user._id, user: new SafeUser<Parent>(user) };
+    return {
+      code: '#Success',
+      id: user._id,
+      user: new SafeUser<Parent>(deep_stringify(user)),
+    };
   }
 
   async loginEducator(
@@ -150,7 +154,7 @@ export class AuthService {
     return {
       code: '#Success',
       id: user._id,
-      user: new SafeUser<Educator>(user),
+      user: new SafeUser<Educator>(deep_stringify(user)),
       isAdmin: titles.includes('admin'),
     };
   }

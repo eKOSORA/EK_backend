@@ -38,6 +38,7 @@ export class AuthController {
     @Body() { accountType, emailorcode, password, school }: LoginBody,
     @Res() res: Response,
   ): Promise<Response> {
+    console.log('[LOGIN]');
     const result: DefaultAuthResponse = await this.authService.login(
       accountType,
       emailorcode,
@@ -51,7 +52,10 @@ export class AuthController {
         id: undefined,
       });
 
-    res.cookie('jwt', result.token, { maxAge: 2 * 60 * 60 * 1000 });
+    res.cookie('jwt', result.token, {
+      maxAge: 2 * 60 * 60 * 1000,
+      sameSite: 'none',
+    });
     return res.status(200).json({ ...result, token: undefined, id: undefined });
   }
 
