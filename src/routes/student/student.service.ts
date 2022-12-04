@@ -71,7 +71,7 @@ export class StudentService {
 
   @ErrorChecker()
   async addStudents(schoolId: string, students: StudentBody[]) {
-    students = students.map((student) => ({
+    students = students?.map((student) => ({
       ...student,
       school: new Types.ObjectId(schoolId),
     }));

@@ -49,10 +49,9 @@ export class Record {
   term: mongoose.Types.ObjectId | SchoolTerm;
 }
 
-export const parentLimitCheck = function (_this, next): void {
-  console.log('VALIDATING :', _this);
-  throw new Error('Shit went down');
-  // return this.length >= 2;
+export const parentLimitCheck = function (_this: string[], next): boolean {
+  // console.log('VALIDATING :', _this);
+  return _this.length > 2;
 };
 
 @Schema({ strict: true })
