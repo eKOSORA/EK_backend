@@ -8,7 +8,7 @@ export class DefaultAuthResponse extends DefaultResponse {
 }
 
 export class SafeUser<T> {
-  constructor(userInfo: T, without: string[] = []) {
+  constructor(userInfo: T, ...without: string[]) {
     Object.assign(
       this,
       obj_without(userInfo as object, 'password', '__v', ...without),

@@ -39,7 +39,7 @@ export class Educator {
   @ApiProperty({ type: [String] })
   subjects: mongoose.Types.ObjectId[] | Subject[];
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: process.env.DEFAULT_PROFILE })
   profileLink: string;
 }
 
