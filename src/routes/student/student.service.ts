@@ -82,7 +82,7 @@ export class StudentService {
       school: new MongoTypes.ObjectId(schoolId),
     }));
 
-    console.log(students);
+    console.log(students.length);
     console.log(
       await this.studentModel.insertMany(students, { ordered: false }),
     );
