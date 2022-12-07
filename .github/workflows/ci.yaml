@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Remove .github, dist, node_modules
         run: rsync * ./built -r --exclude .github --exclude dist --exclude node_modules
 
       - name: push to main branch of personal account
