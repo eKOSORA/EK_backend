@@ -1,20 +1,19 @@
-name: Push to personal github account 
-on: 
-  push: 
-    branches:
-      [main]
+name: Push to personal github account
+on:
+  push:
+    branches: [main]
 
-jobs: 
+jobs:
   runs-on: ubuntu-latest
-  steps: 
+  steps:
     - uses: actions/checkout@v2
 
     - name: push to main branch of personal account
       uses: actions/github-action-push-to-another-repository
-      env: 
+      env:
         SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-      with: 
+      with:
         source-directory: ''
         destination-github-user: 'IVainqueur'
         destination-repository-name: 'eKOSORA_backend'
