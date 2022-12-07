@@ -64,7 +64,7 @@ export class Student {
   @ApiProperty()
   school: mongoose.Types.ObjectId | School;
 
-  @Prop({ type: String })
+  @Prop({ type: String, unique: true })
   @ApiProperty()
   code: string;
 
@@ -107,7 +107,10 @@ export class Student {
   @ApiProperty()
   parentEmails: string[];
 
-  @Prop({ type: String })
+  @Prop({
+    type: String,
+    default: process.env.DEFAULT_PROFILE,
+  })
   @ApiProperty()
   profileLink: string;
 }

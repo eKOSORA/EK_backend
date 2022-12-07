@@ -9,7 +9,7 @@ import {
   AddRecordBody,
   UpdateMarkBody,
 } from './student.types';
-import { arr_to_obj, deep_stringify } from './../../config/oneliners';
+import { arr_to_obj, deep_stringify, green } from './../../config/oneliners';
 import {
   Student,
   StudentDocument,
@@ -17,12 +17,13 @@ import {
 } from './../../schemas/student.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, Types as MongoTypes } from 'mongoose';
 import { Parent, ParentDocument } from '../../schemas/parent.schema';
 import { EducatorService } from '../educator/educator.service';
 import { Subject } from '../../schemas/subject.schema';
 import { ResponseWithResults } from 'src/config/global.interface';
 import { ErrorChecker } from '../../custom/custom.decorators';
+import { SafeUser } from '../auth/auth.types';
 
 @Injectable()
 export class StudentService {
@@ -44,14 +45,17 @@ export class StudentService {
   ): Promise<ResponseWithResults> {
     const students = await this.studentModel
       .find({
-        school: new Types.ObjectId(schoolId),
-        $and: [{ 'class._class': _class }, { 'class._year': Number(year) }],
+        school: new MongoTypes.ObjectId(schoolId),
+        $and: [
+          { 'class._class': new RegExp(`${_class}`, 'i') },
+          { 'class._year': Number(year) },
+        ],
       })
       .lean({ options: { _id: true } })
       .populate({ path: 'school', select: ['name', 'initials'] });
 
-    const safeStudents: SafeStudent[] = students.map(
-      (student) => new SafeStudent(student, 'records', 'password'),
+    const safeStudents: SafeUser<Student>[] = students.map(
+      (student) => new SafeUser<Student>(deep_stringify(student), 'records'),
     );
     return {
       code: '#Success',
@@ -60,12 +64,14 @@ export class StudentService {
   }
 
   async getStudentsByAny(schoolId: string, options: Partial<Student> | object) {
+    console.log(green(schoolId, options));
     const students = await this.studentModel
       .find({
-        school: schoolId,
+        school: new MongoTypes.ObjectId(schoolId),
         ...options,
       })
       .lean();
+    console.log(students);
     return deep_stringify(students);
   }
 
@@ -73,10 +79,13 @@ export class StudentService {
   async addStudents(schoolId: string, students: StudentBody[]) {
     students = students?.map((student) => ({
       ...student,
-      school: new Types.ObjectId(schoolId),
+      school: new MongoTypes.ObjectId(schoolId),
     }));
 
-    await this.studentModel.insertMany(students);
+    console.log(students);
+    console.log(
+      await this.studentModel.insertMany(students, { ordered: false }),
+    );
     return { code: '#Success' };
   }
 

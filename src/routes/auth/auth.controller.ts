@@ -38,7 +38,6 @@ export class AuthController {
     @Body() { accountType, emailorcode, password, school }: LoginBody,
     @Res() res: Response,
   ): Promise<Response> {
-    console.log('[LOGIN]');
     const result: DefaultAuthResponse = await this.authService.login(
       accountType,
       emailorcode,

@@ -58,6 +58,22 @@ export class StudentController {
   @UseGuards(OnlyAdminGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOkResponse({
+    description: 'Successfully retrieved all the students',
+    type: ResponseWithResults,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Something went wrong. Please try again.',
+    type: ErrorResponse,
+  })
+  getAllStudents(@JWTToken() token: Jwt) {
+    return this.studentService.getStudentsByAny(token.schoolId, {});
+  }
+
+  @Get('/getAllByClass')
+  @UseGuards(OnlyAdminGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({
     description: 'Successfully retrieved the students',
     type: ResponseWithResults,
   })
@@ -71,6 +87,7 @@ export class StudentController {
     @Query('year', ParseIntPipe) year: number,
     @Query('class') _class: string,
   ) {
+    console.log(year, _class);
     return this.studentService.getStudentsByClass(token.schoolId, year, _class);
   }
 

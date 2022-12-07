@@ -27,7 +27,7 @@ export class Parent {
   @ApiProperty()
   children: mongoose.Types.ObjectId[] | Student[];
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: process.env.DEFAULT_PROFILE })
   @ApiProperty()
   profileLink: string;
 }
