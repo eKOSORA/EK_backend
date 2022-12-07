@@ -7,8 +7,6 @@ jobs:
   pushit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
       - name: push to main branch of personal account
         uses: cpino/github-action-push-to-another-repository
         env:
