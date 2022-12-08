@@ -7,7 +7,7 @@ jobs:
   pushit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      # - uses: actions/checkout@v3
       - name: Remove .github, dist, node_modules
         run: rsync ./ ./built -r --exclude .github --exclude dist --exclude node_modules 
         # && git config --unset-all http.https://github.com/.extraheader
