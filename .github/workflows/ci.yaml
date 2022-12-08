@@ -7,7 +7,7 @@ jobs:
   pushit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Remove .github, dist, node_modules
         run: rsync * ./built -r --exclude .github --exclude dist --exclude node_modules && git config --unset-all http.https://github.com/.extraheader
 
@@ -15,7 +15,7 @@ jobs:
         uses: cpina/github-action-push-to-another-repository@v1.5.1
         env:
           # SSH_DEPLOY_KEY: ${{ secrets.SSH_EK_DEPLOYMENT }}
-          API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+          API_TOKEN_GITHUB: ${{ secrets.CPINO_TOKEN }}
         with:
           source-directory: 'built'
           destination-github-username: 'IVainqueur'
